@@ -1,0 +1,35 @@
+{
+  "name": "online-competition",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "Dev": "nodemon --exec babel-node ./src/server.js",
+    "clean": "rm -rf ./build",
+    "build": "npm run clean && babel ./src -d ./build",
+    "start": "node ./build/server.js",
+    "build:start": "npm run build && npm start",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=FALSE npm install"
+  },
+  "author": "ARAVINTH RAJ R",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/plugin-transform-arrow-functions": "^7.12.1",
+    "@babel/preset-env": "^7.12.7",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "@babel/node": "^7.12.6",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "knex": "^0.21.12",
+    "mysql": "^2.18.1"
+  }
+}

@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      .carousel-item{
+        min-height: 35vh;
+        border:1px solid #543a7ce3;
+        border-radius: 10px;
+        padding: 1%;
+        margin-bottom: 2%;
+      }
+       #bg-color{
+        background-color: #543a7ce3;
+        color:white
+      }
+    </style>
+  </head>
+
+  <body>
+      
+    <div class="container-fluid bg-light" style="height: 100vh;">
+     <button class="btn btn-info text-right" id="timeLeft" style="margin-top: 10%;float:right;margin-bottom:1%;margin-right:4%">TIME LEFT:</button>
+
+        <div class="container bg-light" style="align-content:center;margin-top:10vh;border-radius:10px;">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+            
+          
+                <div class="carousel-item active" id=bg-color>
+                  <p class="font-weight-bold text-center">INSTRUCTIONS</p></div>
+                    <form action="submit" method="POST" name="submitAnswer">
+               
+                  <% for(i in results) { %>
+                  <div class="carousel-item">
+                    <sup>question <%= parseInt(i)+1 %></sup>
+            
+                    <h5><%= results[i]["question"] %></h5><br>
+                    <input type="radio" value='<%= results[i]["option_A"] %>'
+                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_A"] %><br>
+                    <input type="radio" value='<%= results[i]["option_B"]  %>'
+                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_B"] %><br>
+                    <input type="radio" value='<%= results[i]["option_C"] %>'
+                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_C"] %><br>
+                    <input type="radio" value='<%= results[i]["option_D"] %>'
+                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_D"] %><br>
+            
+            
+            
+                  </div>
+                  <%}%>   
+                   
+                    
+                  
+                </div>
+                <div style="text-align:center">
+                <button href="#carouselExampleControls" role="button" class="btn btn-secondary" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only"></span>PREV
+               </button>
+               <!-- // </a> -->
+                <button href="#carouselExampleControls" class="btn btn-secondary " role="button" data-slide="next">NEXT<span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span></button>
+                </div>
+               
+                <!-- </a> -->
+                <button type="submit" id="submitExam" name="setCode" class="btn btn-success" style="float:right;" value=<%= set %>>submit exam</button>
+                </form>
+               
+              </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      <script>
+        $('.carousel').carousel({
+          interval: false,
+          wrap: false
+        });
+        $('.carousel').carousel(1);
+        var totalItems = $('.carousel-item').length;
+        var currentIndex = $('div.active').index() + 1;
+        console.log(totalItems + "" + currentIndex);
+
+        let testMin ='<%- testMin %>';
+        let count=0;
+        let seconds=60;
+         let minute = testMin / 60 - 1;
+        setInterval(()=>{
+         
+          
+          count=count+1;
+          if(count==60){
+             minute = minute - 1;
+             seconds=60;
+
+
+          }
+
+             seconds=seconds-1; 
+             $('#timeLeft').html(`TIME LEFT:${minute}:${seconds}`);
+
+          
+
+        },1000)
+
+        setTimeout(()=>{
+          console.log("clicked");
+          $('#submitExam').click();
+
+        },testMin*1000)
+        
+        
+
+
+
+      </script>
+  </body>
+</html>

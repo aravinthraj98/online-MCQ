@@ -1,0 +1,41 @@
+.grid-container {
+  display: grid;
+  grid-template-rows: 30%;
+  grid-template-columns: 30% 30% 30%;
+  height: 100vh;
+  margin: 4%;
+  padding: 1%;
+  text-align: center;
+  background-color: white;
+  justify-content: center;
+}
+.grid-courseContainer {
+  background-color: rgb(236, 236, 236);
+  margin: 3%;
+  grid-template-columns: 30% 30% 30%;
+  box-shadow: 10px 10px 10px rgb(185, 185, 185);
+  border-radius: 10px;
+  padding-top: 18%;
+  font-size: x-large;
+  font-weight: bolder;
+  color: rgba(48, 43, 43);
+}
+
+.grid-courseContainer:hover {
+  color: rgb(71, 70, 70);
+  background-color: rgb(255, 244, 225);
+  text-decoration: none;
+}
+.grid-set {
+  background-color: white;
+  margin-top: 4%;
+  margin: 3%;
+  grid-template-columns: 80%;
+  box-shadow: 10px 10px 10px rgb(185, 185, 185);
+  min-height: 100px;
+  max-height: auto;
+  padding: 1%;
+  font-size: x-large;
+  font-weight: bolder;
+  color: rgba(48, 43, 43);
+}
