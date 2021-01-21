@@ -8,8 +8,8 @@ const findAllCatagory = () => {
   return allCourse;
 };
 
-const findCatagorySet = (course) => {
-  let getCatagorySet = `select * from catagorySet where catagoryCode="${course}"`;
+const findCatagorySet = (course, email) => {
+  let getCatagorySet = `select * from catagorySet where catagoryCode="${course}" and setCode not In(select setcode from testresult where email="${email}")`;
   console.log({ getCatagorySet });
   return getCatagorySet;
 };
@@ -31,7 +31,10 @@ const findCat = (setCode) => {
   let getset = `select catagoryCode from catagorySet where setCode="${setCode}"`;
   return getset;
 };
-
+const saveResult = (email, setCode, catagoryCode, marks) => {
+  let save = `insert into testresult values("${email}","${setCode}","${catagoryCode}","${marks}")`;
+  return save;
+};
 const saveUsers = (username, email, password) => {
   let save = `insert into user values("${email}","${username}","${password}")`;
   return save;
@@ -41,6 +44,7 @@ module.exports = {
   findCatagorySet,
   findAllCatagory,
   findSet,
+  saveResult,
   getAnswer,
   getLogin,
   findCat,

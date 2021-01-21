@@ -7,15 +7,17 @@ import {
   getLogin,
   findCat,
   saveUsers,
+  saveResult,
 } from '../database/query';
 
 const listCatagory = (req, res) => {
   let query = findAllCatagory();
+  console.log(req.cookies.email);
   connection.query(query, function (err, results) {
     if (err) {
       console.log(err);
     }
-    console.log(results);
+
     let listCat = [];
     for (let i in results) {
       let catagory = {
@@ -36,13 +38,12 @@ const showCatagory = (req, res) => {
   let result = [];
   let query = '';
 
-  query = findCatagorySet(catagory);
-  console.log(query);
+  query = findCatagorySet(catagory, req.cookies.email);
+
   connection.query(query, function (err, results) {
     if (err) {
       console.log(err.message);
     }
-    result = results;
 
     res.render('SetView.ejs', { results });
   });
@@ -50,25 +51,23 @@ const showCatagory = (req, res) => {
 
 const showSet = (req, res) => {
   var set = req.params.set;
- 
-  let result = [];
+
   let query = findSet(set);
   connection.query(query, function (err, results) {
     if (err) {
       console.log(err.message);
     }
-    result = results;
 
     let testMin = 120;
-     req.session.exam = 'writing';
-     req.session.cookie.maxAge=(100)*1000;
-     console.log("session created");
+    req.session.exam = 'writing';
+    req.session.cookie.maxAge = 100 * 1000;
+    console.log('session created');
 
     res.render('testPage.ejs', { results, set, testMin });
   });
 };
 const checkAnswer = async (req, res) => {
-  if(!req.session.exam) return res.redirect("/catagory");
+  if (!req.session.exam) return res.redirect('/catagory');
   let setcode = req.body.setCode;
   let answers = req.body;
   let query = getAnswer(setcode);
@@ -89,9 +88,21 @@ const checkAnswer = async (req, res) => {
       }
     }
     let query1 = findCat(setcode);
+
     connection.query(query1, function (err, results) {
       if (err) console.log(err.message);
-      console.log(results);
+      let catagoryCode = results;
+      console.log(catagoryCode[0].catagoryCode);
+      let saveresult = saveResult(
+        req.cookies.email,
+        setcode,
+        catagoryCode[0].catagoryCode,
+        correct
+      );
+      connection.query(saveresult, function (err, results) {
+        if (err) console.log(err);
+        console.log('saved');
+      });
 
       return res.render('resultView.ejs', { results, setcode, correct, wrong });
     });
@@ -110,6 +121,8 @@ const checkLogin = async (req, res) => {
     if (results.length < 1) {
       return res.render('home.ejs', { msg: 'Login Id not found' });
     }
+    res.cookie('email', email);
+
     return res.redirect('/catagory');
   });
 };

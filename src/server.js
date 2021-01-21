@@ -15,18 +15,24 @@ import ejs from 'ejs';
 import path from 'path';
 import cookieparser from 'cookie-parser';
 import session from 'express-session';
+import cors from 'cors';
 
 const app = express();
 app.set('view engine', 'ejs');
 app.use('/assets', express.static('assets'));
 app.set('views', path.join(__dirname + '/views'));
 app.use(bodyparser.urlencoded({ extended: false }));
+app.use(cookieparser());
+app.use(cors());
 app.use(
   session({
     secret: 'login',
     cookie: { expires: 60 * 60 * 60 * 1000 }, // Approximately Friday, 31 Dec 9999 23:59:59 GMT
   })
 );
+app.get('/cor', (req, res) => {
+  res.json({ msg: 'hello cors dai' });
+});
 app.get('/', (req, res) => {
   res.render('home.ejs');
 });
