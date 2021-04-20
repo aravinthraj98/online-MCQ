@@ -27,6 +27,7 @@ import formidable from 'formidable';
 import { addCatagoryquery } from './database/adminQuery';
 import fs from 'fs';
 import connection from './config/connection';
+import { Console } from 'console';
 
 const app = express();
 
@@ -70,23 +71,38 @@ app.post('/addCatagory', (req, res) => {
     res.send(true);
   });
 });
-app.post('/fileupload', (req, res) => {
+app.post('/fileupload', (req,res,next) => {
   var form = new formidable.IncomingForm();
+  
 
   form.parse(req, function (err, fields, files) {
     var oldpath = files.filetoupload.path;
-    var newpath = path.join('./assets/' + files.filetoupload.name);
+    var newpath = path.join('./assets/' + 'upload.xlsx');
 
     try {
       fs.rename(oldpath, newpath, function (err) {
         if (err) console.log(err);
+        next();
 
-        return res.send('file uploadedddd');
+       // return res.send('file uploadedddd');
       });
     } catch (err) {
       console.log(err);
     }
   });
+});
+
+app.post('/fileupload', (req, res) => {
+  let getFile = path.join('./assets/upload.xlsx');
+
+  xlsxFile(getFile).then((row) => {
+   
+  });
+
+  // connection.query(query, function (err, results) {
+  //   if (err) console.log(err);
+  //   res.send('updated');
+  // });
 });
 app.get('/cor', (req, res) => {
   res.json({ msg: 'hello cors dai' });

@@ -92,7 +92,7 @@
                 <hr class="my-3" />
 
                 <label class="checkbox-inline">
-                    <form method="POST" style="display:'none'">
+                    <Form method="POST" action="/fileupload" enctype="multipart/form-data" style="display: '';">
                         Add Set<br>
                         <select class="form-control">
                             <% for(i in results){ %>
@@ -101,7 +101,11 @@
                         </select><br>
                         <input type="text" placeholder="setCode" class="form-control"><br>
                         <input type="text" placeholder="setName" class="form-control"><br>
-                        <input type="submit" class="btn" style="background-color: indigo;" />
+                        <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
+                            xlsx filled properly other wise the upload will be interrupted with error.But still the
+                            cells which already above the error row will be uploaded..</i><br>
+                        <input type="file" name="filetoupload" accept=".xlsx" />
+                        <input type="submit" id="addSet" class="btn" style="background-color: indigo;" />
 
 
                     </form>
@@ -146,6 +150,7 @@
     </script>
     <script src=https://code.jquery.com/jquery-3.5.1.js></script>
     <script>
+
         $("#addCatagory").click(function (e) {
             e.preventDefault();
             addCatagory();
