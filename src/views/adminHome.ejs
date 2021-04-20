@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <style>
+        .mycolor {
+            color: white;
+        }
+    </style>
+
+    <link rel="stylesheet" href="/assets/simple-sidebar.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <link href="/assets/sidenav.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="border-right" id="sidebar-wrapper" style="background-color: indigo;color:ivory">
+            <span class="badge badge-dark navbar-brand sidebar-heading">Covid-9</span>
+            <div class="list-group list-group-flush" style="background-color: indigo;">
+                <a class="list-group-item list-group-item-action" style="background-color: indigo;">
+                    <div class="mycolor" id="profile">
+                        <i class="fa fa-user" style="font-size: 18px" class="mr-4">
+                            <span class="ml-2">Profile</span>
+                        </i>
+                    </div>
+                </a>
+                <a href="#" data-toggle="modal" data-target="#detailsModal"
+                    class="list-group-item list-group-item-action " style="background-color: indigo;" id="detail">
+                    <div class="mycolor ml-4">Family Details</div>
+                </a>
+                <a href="#" data-toggle="modal" data-target="#pwdModal" class="list-group-item list-group-item-action "
+                    style="background-color: indigo;" id="changepassword">
+                    <div class="mycolor ml-4">Change Passwored</div>
+                </a>
+                <a href="#" data-toggle="modal" data-target="#complaintModal"
+                    class="list-group-item list-group-item-action " style="background-color: indigo;">
+                    <div class="mycolor">
+                        <i class="fa fa-fa fa-leanpub" style="font-size: 18px">
+                            <span class="mycolor ml-2">Raise a Complaint</span>
+                        </i>
+                    </div>
+                </a>
+                <a onclick="getcases()" href="" data-toggle="modal" data-target="#casesModal"
+                    class="list-group-item list-group-item-action" style="background-color: indigo;">
+                    <div class="mycolor">
+                        <i class="fa fa-exclamation-triangle " style="font-size: 18px">
+                            <span class="mycolor ml-2">Total Cases</span>
+                        </i>
+                    </div>
+                </a>
+                <a href="/api/user/logout" class="list-group-item list-group-item-action "
+                    style="background-color: indigo;">
+                    <div class="mycolor">
+                        <i class="fa fa-sign-out" style="font-size: 18px">
+                            <span class="mycolor ml-2">Logout</span>
+                        </i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+                <button class="btn" id="menu-toggle">
+                    <i class="fa fa-bars" aria-hidden="true" style="font-size: 18px"></i>
+                </button>
+            </nav>
+
+            <!-- Total Cases Modal -->
+
+
+
+            <div class="container jumbotron w-75 my-2">
+                <h1 class="display-4">Your Readings</h1>
+                <hr class="my-3" />
+
+                <label class="checkbox-inline">
+                    <form method="POST" style="display:'none'">
+                        Add Set<br>
+                        <select class="form-control">
+                            <% for(i in results){ %>
+                            <option value=`<%= results[i]['catagoryCode'] %>`><%= results[i]['catagoryCode'] %></option>
+                            <% } %>
+                        </select><br>
+                        <input type="text" placeholder="setCode" class="form-control"><br>
+                        <input type="text" placeholder="setName" class="form-control"><br>
+                        <input type="submit" class="btn" style="background-color: indigo;" />
+
+
+                    </form>
+                    <!-- method="POST" action="/addCatagory" -->
+
+                    <form style="display: '';">
+                        Add Catagory<br>
+                        <input type="text" placeholder="catagoryCode" id="catagoryCode" class="form-control"><br>
+                        <input type="text" placeholder="catagoryName" id="catagoryName" class="form-control"><br>
+                        <input type="submit" value="addCatagory" id="addCatagory" class="btn"
+                            style="background-color: indigo;color:white" />
+
+
+                    </form>
+                    <Form method="POST" action="/fileupload" enctype="multipart/form-data" style="display: none;">
+                        <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
+                            xlsx filled properly other wise the upload will be interrupted with error.But still the
+                            cells which already above the error row will be uploaded..</i><br>
+                        <input type="file" name="filetoupload" accept=".csv" />
+                        <input type="submit" style="background-color: indigo;color:white" class="btn"
+                            value="add questions">
+                    </Form>
+                </label>
+            </div>
+        </div>
+        <!-- Complaint modal -->
+
+    </div>
+
+    <script>
+
+
+
+
+
+        $('#menu-toggle').click(function (e) {
+            e.preventDefault();
+            $('#wrapper').toggleClass('toggled');
+        });
+
+
+    </script>
+    <script src=https://code.jquery.com/jquery-3.5.1.js></script>
+    <script>
+        $("#addCatagory").click(function (e) {
+            e.preventDefault();
+            addCatagory();
+
+        })
+        function addCatagory() {
+            console.log("added")
+
+
+
+            $.post("/addCatagory", {
+                catagoryCode: $("#catagoryCode").val(),
+                catagoryName: $("#catagoryName").val()
+
+            }, (data, status) => {
+                console.log(data);
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

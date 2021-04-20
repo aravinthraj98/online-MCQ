@@ -56,6 +56,7 @@ const showSet = (req, res) => {
   connection.query(query, function (err, results) {
     if (err) {
       console.log(err.message);
+      console.log('no connection');
     }
 
     let testMin = 120;
@@ -156,24 +157,24 @@ const saveUser = (req, res) => {
   });
 };
 
-const query = async (query) => {
-  let result = ['result'];
-  connection.query(query, function (err, results) {
-    if (err) {
-      console.log(err.message);
-    }
-    result = results;
-    console.log(result);
-  });
-  return result;
-};
+// const query = async (query) => {
+//   let result = ['result'];
+//   connection.query(query, function (err, results) {
+//     if (err) {
+//       console.log(err.message);
+//     }
+//     result = results;
+//     console.log(result);
+//   });
+//   return result;
+// };
+
 
 module.exports = {
   showSet,
   listCatagory,
   showCatagory,
 
-  query,
   checkAnswer,
   checkLogin,
   checkUser,
