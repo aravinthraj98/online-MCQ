@@ -5,10 +5,11 @@ import {
   showSet,
   listCatagory,
   checkAnswer,
-  checkLogin,
+  // checkLogin,
   checkUser,
   saveUser,
 } from './database/db';
+import db from './../models';
 
 import {
   findAllCatagory,
@@ -28,6 +29,8 @@ import { addCatagoryquery } from './database/adminQuery';
 import fs from 'fs';
 import connection from './config/connection';
 import { Console } from 'console';
+import { callbackify } from 'util';
+import { newUser, checkLogin } from './services/UserServices';
 
 const app = express();
 
@@ -44,12 +47,12 @@ app.use(
     cookie: { expires: 60 * 60 * 60 * 1000 }, // Approximately Friday, 31 Dec 9999 23:59:59 GMT
   })
 );
-app.get('/t', (req, res) => {
+app.get('/t', async (req, res) => {
   console.log('ff');
-  connection.query(findAllCatagory(), function (err, results) {
-    if (err) console.log(err);
-    res.render('adminHome.ejs', { results });
-  });
+  // await newUser('aravinth@gmail.com', 'aravinth', 'aravinth');
+  let check = await checkLogin('aravinth@gmail.com', 'aravinth');
+  console.log('login' + check);
+  res.send('new User');
 });
 app.get('/test', (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
@@ -71,9 +74,8 @@ app.post('/addCatagory', (req, res) => {
     res.send(true);
   });
 });
-app.post('/fileupload', (req,res,next) => {
+app.post('/fileupload', (req, res, next) => {
   var form = new formidable.IncomingForm();
-  
 
   form.parse(req, function (err, fields, files) {
     var oldpath = files.filetoupload.path;
@@ -84,7 +86,7 @@ app.post('/fileupload', (req,res,next) => {
         if (err) console.log(err);
         next();
 
-       // return res.send('file uploadedddd');
+        // return res.send('file uploadedddd');
       });
     } catch (err) {
       console.log(err);
@@ -96,7 +98,14 @@ app.post('/fileupload', (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
 
   xlsxFile(getFile).then((row) => {
-   
+    console.log(row);
+  });
+  let getcat = findAllCatagory();
+
+  connection.query(getcat, function (err, results) {
+    if (err) console.log(err);
+    console.log(results);
+    return res.render('adminHome.ejs', { results: results });
   });
 
   // connection.query(query, function (err, results) {
@@ -130,9 +139,10 @@ app.get('/:cat/:set', showSet);
 //     console.log(set)
 //     console.log(quer);
 app.post('/:cat/submit', checkAnswer);
-
-app.listen(3323, () => {
-  console.log(`http://localhost:3323`);
+db.sequelize.sync().then((req) => {
+  app.listen(3323, () => {
+    console.log(`http://localhost:3323`);
+  });
 
   //
   //
