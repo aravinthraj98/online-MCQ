@@ -1,69 +1,78 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Title</title>
-    <style>
-      .none {
-         
-        text-decoration: none;
-        color: white;
-      
-      }
-      .none:hover{
-        text-decoration: none;
-        color: white;
 
-      }
-      
-      #bg-color{
-        background-color: #543a7ce3;
-      }
-     
-    </style>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <title>Title</title>
+  <style>
+    .none {
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
+      text-decoration: none;
+      color: white;
 
-  <body>
-    <div class="container-fluid" style="background:whitesmoke;height:100vh">
-        <div class ="row p-4" >
-            <% for(i in list){ %>
-              <div class=" col-md-4" style="margin-top: 2%;">
-                <div class="h-100 card shadow p-2" >
-                      <div class="h-auto card-body">
-                        <h4 class="card-title text-center"><%= list[i]["catagoryCode"] %></h4>
+    }
 
-                         <p class="text-center"><%= list[i]["catagoryName"] %></p>
-                        
-                       </div>
-                        <div class=" card-footer  text-center border-light" id=bg-color>
-                          <a class="none" href=/<%= list[i]["catagoryCode"] %>>
-                            View Catagory
-                          </a>
-                        
-                        </div>
-              
-                </div>
-              </div>
-           
-            
-           
-            
-            <% } %>
+    .none:hover {
+      text-decoration: none;
+      color: white;
+
+    }
+
+    #bg-color {
+      background-color: #543a7ce3;
+    }
+  </style>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container-fluid" style="background:whitesmoke;height:100vh">
+    <div class="row p-4">
+      <% for(i in list){ %>
+      <div class=" col-md-4" style="margin-top: 2%;">
+        <div class="h-100 card shadow p-2">
+          <div class="h-auto card-body">
+            <h4 class="card-title text-center"><%= list[i]["categoryCode"] %></h4>
+
+            <p class="text-center"><%= list[i]["categoryName"] %></p>
+
+          </div>
+          <div class=" card-footer  text-center border-light" id=bg-color>
+            <a class="none" href=/<%= list[i]["categoryCode"] %>>
+              View Catagory
+            </a>
+
+          </div>
+
         </div>
-          
-           
-         
-        
+      </div>
+
+
+
+
+      <% } %>
     </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  </body>
+
+
+
+
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>

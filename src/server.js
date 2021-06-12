@@ -15,6 +15,7 @@ import {
   findSet,
   getAnswer,
 } from './database/query';
+import {fetchCatagory,getAllCategory} from "./services/GetDataServices"
 import bodyparser from 'body-parser';
 import ejs from 'ejs';
 import { checkAdmin } from './controllers/admin/admin';
@@ -127,6 +128,7 @@ app.post('/login', async (req, res) => {
   let password = req.body.password;
   let isuser = await checkLogin(email, password);
   if (isuser) {
+    res.cookie('email', email);
     return res.redirect('/catagory');
   } else {
     return res.render('home.ejs', {
@@ -154,7 +156,12 @@ app.post('/signup', async (req, res) => {
   return res.redirect('/catagory');
 });
 
-app.get('/catagory', listCatagory);
+app.get('/catagory', (req,res)=>{
+  if(!req.cookies.email) return res.redirect("/");
+       let listCat=getAllCategory();
+       console.log(listCat);
+ return res.render('CatagoryView.ejs', { list: listCat });
+});
 
 app.get('/:cat', showCatagory);
 app.get('/:cat/:set', showSet);
@@ -168,6 +175,7 @@ app.get('/:cat/:set', showSet);
 app.post('/:cat/submit', checkAnswer);
 db.sequelize.sync().then((req) => {
   app.listen(3323, () => {
+    fetchCatagory();
     console.log(`http://localhost:3323`);
   });
 
