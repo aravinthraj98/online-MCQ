@@ -6,8 +6,6 @@ import {
   listCatagory,
   checkAnswer,
   // checkLogin,
-  checkUser,
-  saveUser,
 } from './database/db';
 import db from './../models';
 
@@ -30,7 +28,7 @@ import fs from 'fs';
 import connection from './config/connection';
 import { Console } from 'console';
 import { callbackify } from 'util';
-import { newUser, checkLogin } from './services/UserServices';
+import { newUser, checkLogin, checkUser } from './services/UserServices';
 
 const app = express();
 
@@ -124,8 +122,37 @@ app.post('/admin/login', checkAdmin);
 app.get('/', (req, res) => {
   res.render('home.ejs');
 });
-app.post('/login', checkLogin);
-app.post('/signup', checkUser, saveUser);
+app.post('/login', async (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let isuser = await checkLogin(email, password);
+  if (isuser) {
+    return res.redirect('/catagory');
+  } else {
+    return res.render('home.ejs', {
+      msg: 'password not valid',
+    });
+  }
+});
+app.post('/signup', async (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  let confirmpassword = req.body.confirmpassword;
+  let name = req.body.name;
+  if (password != confirmpassword)
+    return res.render('home.ejs', {
+      msg: 'password and confirm password shoud be same',
+    });
+  let isuser = await checkUser(email);
+  if (isuser == true) {
+    return res.render('home.ejs', {
+      msg: 'User Present',
+    });
+  } else {
+    await newUser(email, name, password);
+  }
+  return res.redirect('/catagory');
+});
 
 app.get('/catagory', listCatagory);
 
