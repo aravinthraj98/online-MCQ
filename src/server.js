@@ -30,6 +30,7 @@ import connection from './config/connection';
 import { Console } from 'console';
 import { callbackify } from 'util';
 import { newUser, checkLogin, checkUser } from './services/UserServices';
+import {AdminLogin,AddCategory} from "./services/AdminService"
 
 const app = express();
 
@@ -62,16 +63,12 @@ app.get('/test', (req, res) => {
   //   res.send('updated');
   // });
 });
-app.post('/addCatagory', (req, res) => {
+app.post('/addCatagory', async(req, res) => {
   let catagoryCode = req.body.catagoryCode;
   let catagoryName = req.body.catagoryName;
-  let query = addCatagoryquery(catagoryCode, catagoryName);
-  connection.query(query, function (err, results) {
-    if (err) {
-      return res.send(err.sqlMessage);
-    }
-    res.send(true);
-  });
+  let isCreate =await AddCategory(catagoryCode,catagoryName)
+  console.log(isCreate);
+  return res.send(isCreate);
 });
 app.post('/fileupload', (req, res, next) => {
   var form = new formidable.IncomingForm();
@@ -118,7 +115,19 @@ app.get('/cor', (req, res) => {
 app.get('/admin', (req, res) => {
   return res.render('adminLogin.ejs');
 });
-app.post('/admin/login', checkAdmin);
+app.post('/admin/login', async(req,res)=>{
+  let username = req.body.id;
+  let password = req.body.password;
+  let isadmin = await AdminLogin(username,password);
+  console.log(isadmin);
+ let listCat=getAllCategory();
+  if(isadmin){
+    return res.render("adminHome.ejs",{results:listCat});
+  }
+  else{
+    return res.render("adminLogin.ejs",{msg:"username or password wrong"})
+  }
+});
 
 app.get('/', (req, res) => {
   res.render('home.ejs');

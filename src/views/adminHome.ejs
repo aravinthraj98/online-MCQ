@@ -42,35 +42,39 @@
                 </a>
                 <a href="#" data-toggle="modal" data-target="#detailsModal"
                     class="list-group-item list-group-item-action " style="background-color: indigo;" id="detail">
-                    <div class="mycolor ml-4">Family Details</div>
+                    <button onclick="show(`AddCatForm`)" style="background-color:indigo;color:white;border:none;"
+                        class="mycolor ml-4">Add
+                        Catagory</button>
                 </a>
-                <a href="#" data-toggle="modal" data-target="#pwdModal" class="list-group-item list-group-item-action "
+                <!-- <a href="#" data-toggle="modal" data-target="#pwdModal" class="list-group-item list-group-item-action "
                     style="background-color: indigo;" id="changepassword">
-                    <div class="mycolor ml-4">Change Passwored</div>
-                </a>
+                    <button style="background-color:indigo;color:white;border:none;" class="mycolor ml-4">Add
+                        Set</button>
+                </a> -->
                 <a href="#" data-toggle="modal" data-target="#complaintModal"
                     class="list-group-item list-group-item-action " style="background-color: indigo;">
-                    <div class="mycolor">
+                    <button onclick="show(`AddQuestion`)" style="background-color:indigo;color:white;border:none;"
+                        class="mycolor ml-4">
                         <i class="fa fa-fa fa-leanpub" style="font-size: 18px">
-                            <span class="mycolor ml-2">Raise a Complaint</span>
+                            <span class="mycolor ml-2">Add Set</span>
                         </i>
-                    </div>
+                    </button>
                 </a>
-                <a onclick="getcases()" href="" data-toggle="modal" data-target="#casesModal"
-                    class="list-group-item list-group-item-action" style="background-color: indigo;">
-                    <div class="mycolor">
-                        <i class="fa fa-exclamation-triangle " style="font-size: 18px">
-                            <span class="mycolor ml-2">Total Cases</span>
-                        </i>
-                    </div>
-                </a>
+                <!-- <a data-toggle="modal" data-target="#casesModal" class="list-group-item list-group-item-action"
+                    style="background-color: indigo;">
+
+                    <i class="fa fa-exclamation-triangle " style="font-size: 18px">
+                        <span class="mycolor ml-2">Add Set</span>
+                    </i>
+                    </button>
+                </a> -->
                 <a href="/api/user/logout" class="list-group-item list-group-item-action "
                     style="background-color: indigo;">
-                    <div class="mycolor">
-                        <i class="fa fa-sign-out" style="font-size: 18px">
-                            <span class="mycolor ml-2">Logout</span>
-                        </i>
-                    </div>
+
+                    <i class="fa fa-sign-out" style="font-size: 18px">
+                        <span class="mycolor ml-2">Logout</span>
+                    </i>
+                    </button>
                 </a>
             </div>
         </div>
@@ -87,16 +91,17 @@
 
 
 
-            <div class="container jumbotron w-75 my-2">
+            <div class="container-fluid  my-2">
                 <h1 class="display-4">Your Readings</h1>
                 <hr class="my-3" />
 
                 <label class="checkbox-inline">
-                    <Form method="POST" action="/fileupload" enctype="multipart/form-data" style="display: '';">
+                    <Form method="POST" id="AddQuestion" action="/fileupload" enctype="multipart/form-data"
+                        style="display: '';">
                         Add Set<br>
                         <select class="form-control">
                             <% for(i in results){ %>
-                            <option value=`<%= results[i]['catagoryCode'] %>`><%= results[i]['catagoryCode'] %></option>
+                            <option value=`<%= results[i]['categoryCode'] %>`><%= results[i]['categoryName'] %></option>
                             <% } %>
                         </select><br>
                         <input type="text" placeholder="setCode" class="form-control"><br>
@@ -111,7 +116,7 @@
                     </form>
                     <!-- method="POST" action="/addCatagory" -->
 
-                    <form style="display: '';">
+                    <form style="display: '';" id="AddCatForm">
                         Add Catagory<br>
                         <input type="text" placeholder="catagoryCode" id="catagoryCode" class="form-control"><br>
                         <input type="text" placeholder="catagoryName" id="catagoryName" class="form-control"><br>
@@ -120,14 +125,7 @@
 
 
                     </form>
-                    <Form method="POST" action="/fileupload" enctype="multipart/form-data" style="display: none;">
-                        <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
-                            xlsx filled properly other wise the upload will be interrupted with error.But still the
-                            cells which already above the error row will be uploaded..</i><br>
-                        <input type="file" name="filetoupload" accept=".csv" />
-                        <input type="submit" style="background-color: indigo;color:white" class="btn"
-                            value="add questions">
-                    </Form>
+
                 </label>
             </div>
         </div>
@@ -166,10 +164,29 @@
                 catagoryName: $("#catagoryName").val()
 
             }, (data, status) => {
-                console.log(data);
+
+                if (data == true) {
+                    $("#catagoryCode").val("");
+                    $("#catagoryName").val("");
+                }
+                else {
+                    alert(data);
+                }
             });
 
         }
+        function hideAll() {
+            console.log("hide");
+            $("#AddQuestion").css({ display: "none" });
+            $("#AddCatForm").css({ display: "none" });
+        }
+        function show(id) {
+            hideAll();
+            $(`#${id}`).css({ display: "" });
+
+
+        }
+
 
     </script>
 </body>
