@@ -30,7 +30,7 @@ import connection from './config/connection';
 import { Console } from 'console';
 import { callbackify } from 'util';
 import { newUser, checkLogin, checkUser } from './services/UserServices';
-import {AdminLogin,AddCategory} from "./services/AdminService"
+import {AdminLogin,AddCategory, AddSet} from "./services/AdminService"
 
 const app = express();
 
@@ -67,7 +67,9 @@ app.post('/addCatagory', async(req, res) => {
   let catagoryCode = req.body.catagoryCode;
   let catagoryName = req.body.catagoryName;
   let isCreate =await AddCategory(catagoryCode,catagoryName)
-  console.log(isCreate);
+  if(isCreate){
+    await fetchCatagory();
+  }
   return res.send(isCreate);
 });
 app.post('/fileupload', (req, res, next) => {
@@ -109,6 +111,23 @@ app.post('/fileupload', (req, res) => {
   //   res.send('updated');
   // });
 });
+app.post("/admin/addSet",(req,res)=>{
+let setCode = req.body.setCode;
+let setName =req.body.setName;
+let setDescription=req.body.setDescription;
+let categoryCode =req.body.categoryCode;
+console.log(categoryCode);
+let timeLimit =req.body.timeLimit;
+let isSet =AddSet(setCode,setName,setDescription,timeLimit,categoryCode);
+let listCat=getAllCategory();
+if(isSet){
+  
+  return res.render('adminHome.ejs', { results: listCat,msg:"set added succesfull"});
+}
+else{
+  return res.render('adminHome.ejs', { results: listCat,msg:"set adding failed"});
+}
+})
 app.get('/cor', (req, res) => {
   res.json({ msg: 'hello cors dai' });
 });

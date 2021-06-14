@@ -60,14 +60,17 @@
                         </i>
                     </button>
                 </a>
-                <!-- <a data-toggle="modal" data-target="#casesModal" class="list-group-item list-group-item-action"
+                <a data-toggle="modal" data-target="#casesModal" class="list-group-item list-group-item-action"
                     style="background-color: indigo;">
+                    <button onclick="show(`AddSetForm`)" style="background-color:indigo;color:white;border:none;"
+                        class="mycolor ml-4">
 
-                    <i class="fa fa-exclamation-triangle " style="font-size: 18px">
-                        <span class="mycolor ml-2">Add Set</span>
-                    </i>
+
+                        <i class="fa fa-exclamation-triangle " style="font-size: 18px">
+                            <span class="mycolor ml-2">Add Set</span>
+                        </i>
                     </button>
-                </a> -->
+                </a>
                 <a href="/api/user/logout" class="list-group-item list-group-item-action "
                     style="background-color: indigo;">
 
@@ -96,27 +99,44 @@
                 <hr class="my-3" />
 
                 <label class="checkbox-inline">
+                    <% if(locals.msg) {%>
+                    <p class="text-center alert alert-info"><%= msg %></p>
+                    <%}%>
                     <Form method="POST" id="AddQuestion" action="/fileupload" enctype="multipart/form-data"
                         style="display: '';">
                         Add Set<br>
-                        <select class="form-control">
+                        <select class="form-control" id="selectCategory">
                             <% for(i in results){ %>
-                            <option value=`<%= results[i]['categoryCode'] %>`><%= results[i]['categoryName'] %></option>
-                            <% } %>
-                        </select><br>
-                        <input type="text" placeholder="setCode" class="form-control"><br>
-                        <input type="text" placeholder="setName" class="form-control"><br>
-                        <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
-                            xlsx filled properly other wise the upload will be interrupted with error.But still the
-                            cells which already above the error row will be uploaded..</i><br>
-                        <input type="file" name="filetoupload" accept=".xlsx" />
-                        <input type="submit" id="addSet" class="btn" style="background-color: indigo;" />
+                    <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
+                    <% } %>
+                    </select><br>
+                    <input type="text" placeholder="setCode" class="form-control"><br>
+                    <input type="text" placeholder="setName" class="form-control"><br>
+                    <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
+                        xlsx filled properly other wise the upload will be interrupted with error.But still the
+                        cells which already above the error row will be uploaded..</i><br>
+                    <input type="file" name="filetoupload" accept=".xlsx" />
+                    <input type="submit" id="addSet" class="btn" style="background-color: indigo;" />
 
 
                     </form>
                     <!-- method="POST" action="/addCatagory" -->
+                    <form style="display:none;" method="POST" action="/admin/addSet" id="AddSetForm">
+                        <select class="form-control" name="categoryCode" id="selectCategory" required>
+                            <% for(i in results){ %>
+                            <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
+                            <% } %>
+                        </select><br>
+                        <input type="text" name="setCode" placeholder="setCode" class="form-control" required><br>
+                        <input type="text" name="setName" placeholder="setName" class="form-control" required><br>
+                        <input type="text" name="setDescription" placeholder="setDescription" class="form-control"
+                            required><br>
+                        <input type="number" class="form-control" name="timeLimit" placeholder="time limit"
+                            required><br>
+                        <input type="submit" class="btn" style="background-color: indigo;color:white" value="AddSet">
+                    </form>
 
-                    <form style="display: '';" id="AddCatForm">
+                    <form style="display:none;" id="AddCatForm">
                         Add Catagory<br>
                         <input type="text" placeholder="catagoryCode" id="catagoryCode" class="form-control"><br>
                         <input type="text" placeholder="catagoryName" id="catagoryName" class="form-control"><br>
@@ -166,8 +186,12 @@
             }, (data, status) => {
 
                 if (data == true) {
+                    let selectCat = document.getElementById("selectCategory");
+                    selectCat.innerHTML += `<option value=${$("#catagoryCode").val()}> ${$("#catagoryName").val()}</option>`;
+
                     $("#catagoryCode").val("");
                     $("#catagoryName").val("");
+                    alert("catagory saved");
                 }
                 else {
                     alert(data);
@@ -179,6 +203,8 @@
             console.log("hide");
             $("#AddQuestion").css({ display: "none" });
             $("#AddCatForm").css({ display: "none" });
+            $("#AddSetForm").css({ display: "none" });
+
         }
         function show(id) {
             hideAll();

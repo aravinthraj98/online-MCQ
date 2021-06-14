@@ -3,10 +3,12 @@ const Category = db.category;
 let categoryData =[];
 async function fetchCatagory(){
     let allCatagory =await Category.findAll();
+    let tempData=[];
     
     for( let i in allCatagory){
-        categoryData.push(allCatagory[i].dataValues);
+        tempData.push(allCatagory[i].dataValues);
     }
+    categoryData=tempData;
     
 
 }

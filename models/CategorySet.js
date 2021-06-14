@@ -22,6 +22,20 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    timeLimit: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+     categoryCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
   return Set;
 };
