@@ -31,6 +31,7 @@ import { Console } from 'console';
 import { callbackify } from 'util';
 import { newUser, checkLogin, checkUser } from './services/UserServices';
 import {AdminLogin,AddCategory, AddSet} from "./services/AdminService"
+import MountApp from './routing';
 
 const app = express();
 
@@ -54,6 +55,7 @@ app.get('/t', async (req, res) => {
   console.log('login' + check);
   res.send('new User');
 });
+MountApp(app);
 app.get('/test', (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
   xlsxFile(getFile).then((row) => {});
@@ -63,15 +65,8 @@ app.get('/test', (req, res) => {
   //   res.send('updated');
   // });
 });
-app.post('/addCatagory', async(req, res) => {
-  let catagoryCode = req.body.catagoryCode;
-  let catagoryName = req.body.catagoryName;
-  let isCreate =await AddCategory(catagoryCode,catagoryName)
-  if(isCreate){
-    await fetchCatagory();
-  }
-  return res.send(isCreate);
-});
+
+// });
 app.post('/fileupload', (req, res, next) => {
   var form = new formidable.IncomingForm();
 
@@ -111,95 +106,15 @@ app.post('/fileupload', (req, res) => {
   //   res.send('updated');
   // });
 });
-app.post("/admin/addSet",(req,res)=>{
-let setCode = req.body.setCode;
-let setName =req.body.setName;
-let setDescription=req.body.setDescription;
-let categoryCode =req.body.categoryCode;
-console.log(categoryCode);
-let timeLimit =req.body.timeLimit;
-let isSet =AddSet(setCode,setName,setDescription,timeLimit,categoryCode);
-let listCat=getAllCategory();
-if(isSet){
-  
-  return res.render('adminHome.ejs', { results: listCat,msg:"set added succesfull"});
-}
-else{
-  return res.render('adminHome.ejs', { results: listCat,msg:"set adding failed"});
-}
-})
+
 app.get('/cor', (req, res) => {
   res.json({ msg: 'hello cors dai' });
 });
-app.get('/admin', (req, res) => {
-  return res.render('adminLogin.ejs');
-});
-app.post('/admin/login', async(req,res)=>{
-  let username = req.body.id;
-  let password = req.body.password;
-  let isadmin = await AdminLogin(username,password);
-  console.log(isadmin);
- let listCat=getAllCategory();
-  if(isadmin){
-    return res.render("adminHome.ejs",{results:listCat});
-  }
-  else{
-    return res.render("adminLogin.ejs",{msg:"username or password wrong"})
-  }
-});
 
-app.get('/', (req, res) => {
-  res.render('home.ejs');
-});
-app.post('/login', async (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let isuser = await checkLogin(email, password);
-  if (isuser) {
-    res.cookie('email', email);
-    return res.redirect('/catagory');
-  } else {
-    return res.render('home.ejs', {
-      msg: 'password not valid',
-    });
-  }
-});
-app.post('/signup', async (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let confirmpassword = req.body.confirmpassword;
-  let name = req.body.name;
-  if (password != confirmpassword)
-    return res.render('home.ejs', {
-      msg: 'password and confirm password shoud be same',
-    });
-  let isuser = await checkUser(email);
-  if (isuser == true) {
-    return res.render('home.ejs', {
-      msg: 'User Present',
-    });
-  } else {
-    await newUser(email, name, password);
-  }
-  return res.redirect('/catagory');
-});
-
-app.get('/catagory', (req,res)=>{
-  if(!req.cookies.email) return res.redirect("/");
-       let listCat=getAllCategory();
-       console.log(listCat);
- return res.render('CatagoryView.ejs', { list: listCat });
-});
 
 app.get('/:cat', showCatagory);
 app.get('/:cat/:set', showSet);
 
-// console.log(req.params.catagory)
-// if(req.params.set){
-//     let set= findSet(req.params.set)
-//     const quer=await query(set);
-//     console.log(set)
-//     console.log(quer);
 app.post('/:cat/submit', checkAnswer);
 db.sequelize.sync().then((req) => {
   app.listen(3323, () => {
