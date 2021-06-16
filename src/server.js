@@ -1,36 +1,27 @@
 import express from 'express';
 import {
   showCatagory,
-  query,
   showSet,
-  listCatagory,
   checkAnswer,
   // checkLogin,
 } from './database/db';
 import db from './../models';
 
-import {
-  findAllCatagory,
-  findCatagorySet,
-  findSet,
-  getAnswer,
-} from './database/query';
-import {fetchCatagory,getAllCategory} from "./services/GetDataServices"
+import { findAllCatagory } from './database/query';
+import { fetchCatagory } from './services/GetDataServices';
 import bodyparser from 'body-parser';
-import ejs from 'ejs';
-import { checkAdmin } from './controllers/admin/admin';
+
 import path from 'path';
 import cookieparser from 'cookie-parser';
 import session from 'express-session';
 import cors from 'cors';
 import formidable from 'formidable';
-import { addCatagoryquery } from './database/adminQuery';
+
 import fs from 'fs';
 import connection from './config/connection';
-import { Console } from 'console';
-import { callbackify } from 'util';
-import { newUser, checkLogin, checkUser } from './services/UserServices';
-import {AdminLogin,AddCategory, AddSet} from "./services/AdminService"
+
+import { checkLogin } from './services/UserServices';
+
 import MountApp from './routing';
 
 const app = express();
@@ -110,7 +101,6 @@ app.post('/fileupload', (req, res) => {
 app.get('/cor', (req, res) => {
   res.json({ msg: 'hello cors dai' });
 });
-
 
 app.get('/:cat', showCatagory);
 app.get('/:cat/:set', showSet);
