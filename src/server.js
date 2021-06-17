@@ -46,6 +46,10 @@ app.get('/t', async (req, res) => {
   console.log('login' + check);
   res.send('new User');
 });
+app.post('/adminssss', (req, res) => {
+  console.log('fffsssssssssssss');
+  console.log(req.body);
+});
 MountApp(app);
 app.get('/test', (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
@@ -102,10 +106,10 @@ app.get('/cor', (req, res) => {
   res.json({ msg: 'hello cors dai' });
 });
 
-app.get('/:cat', showCatagory);
-app.get('/:cat/:set', showSet);
+// app.get('/:cat', showCatagory);
+// app.get('/:cat/:set', showSet);
 
-app.post('/:cat/submit', checkAnswer);
+// app.post('/:cat/submit', checkAnswer);
 db.sequelize.sync().then((req) => {
   app.listen(3323, () => {
     fetchCatagory();

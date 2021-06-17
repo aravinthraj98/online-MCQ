@@ -11,7 +11,7 @@
         }
     </style>
 
-    <link rel="stylesheet" href="/assets/simple-sidebar.css" />
+    <link rel="stylesheet" href="/assets/sidenav.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -121,19 +121,20 @@
 
                     </form>
                     <!-- method="POST" action="/addCatagory" -->
-                    <form style="display:none;" method="POST" action="/admin/addSet" id="AddSetForm">
-                        <select class="form-control" name="categoryCode" id="selectCategory" required>
+                    <form style="display:none;"    id="AddSetForm">
+                        <select class="form-control" name="categoryCode" id="SetcategoryCode" required>
                             <% for(i in results){ %>
                             <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
                             <% } %>
                         </select><br>
-                        <input type="text" name="setCode" placeholder="setCode" class="form-control" required><br>
-                        <input type="text" name="setName" placeholder="setName" class="form-control" required><br>
-                        <input type="text" name="setDescription" placeholder="setDescription" class="form-control"
+                        <input type="text" name="setCode" id="setCode" placeholder="setCode" class="form-control" required><br>
+                        <input type="text" name="setName" id="setName" placeholder="setName" class="form-control" required><br>
+                        <input type="text" name="setDescription" id=setDescription placeholder="setDescription" class="form-control"
                             required><br>
                         <input type="number" class="form-control" name="timeLimit" placeholder="time limit"
+                        id="timeLimit"
                             required><br>
-                        <input type="submit" class="btn" style="background-color: indigo;color:white" value="AddSet">
+                        <input type="submit" class="btn" style="background-color: indigo;color:white" id="AddNewSet" value="AddSet">
                     </form>
 
                     <form style="display:none;" id="AddCatForm">
@@ -169,17 +170,82 @@
     <script src=https://code.jquery.com/jquery-3.5.1.js></script>
     <script>
 
+      
+        $("#AddNewSet").click(function(e){
+
+    
+            e.preventDefault();
+            
+            
+         AddSet();
+            
+        })
+
+        function AddSet(){
+            alert("post request");
+              let categoryCode = $("#SetcategoryCode").val();
+            let setCode = $("#setCode").val();
+            let setName = $("#setName").val();
+            let setDescription = $("#setDescription").val();
+            let timeLimit = $("#timeLimit").val();
+            let data = {
+                "setCode":setCode,
+                "setName":setName,
+                "setDescription":setDescription,
+                 "timeLimit":timeLimit,
+                 "categoryCode":categoryCode
+            }
+         
+            console.log(data);
+            console.log(categoryCode);
+            console.log(setCode);
+            console.log(setName);
+            console.log(setDescription);
+            if(setName==null){
+                alert("sss");
+
+                return; 
+            }
+              $.post("/admin/addSet", {
+              setCode,
+              setName,
+              setDescription,
+              timeLimit,
+              categoryCode
+
+            }, (data, status) => {
+
+                if (data == true) {
+                      
+                    $("#setCode").val("");
+                  $("#setName").val("");
+             $("#setDescription").val("");
+                    $("#timeLimit").val("");
+                  
+                    alert("Set saved");
+                }
+                else {
+                    alert(data);
+                }
+            });
+  
+
+        }
+
         $("#addCatagory").click(function (e) {
             e.preventDefault();
             addCatagory();
 
-        })
+        });
+        
+        
         function addCatagory() {
-            console.log("added")
+            console.log("added");
+        
 
 
 
-            $.post("/addCatagory", {
+            $.post("/admin/addCatagory", {
                 catagoryCode: $("#catagoryCode").val(),
                 catagoryName: $("#catagoryName").val()
 
