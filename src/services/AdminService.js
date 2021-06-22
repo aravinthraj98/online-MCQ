@@ -40,4 +40,13 @@ async function AddSet(
     return true;
   }
 }
-export { AdminLogin, AddCategory, AddSet };
+
+async function getAllSet(){
+  let Set=await set.findAll();
+  let AllSet=[];
+  for(let i in Set){
+      AllSet.push(Set[i].dataValues);
+  }
+  return AllSet;
+}
+export { AdminLogin, AddCategory, AddSet,getAllSet };

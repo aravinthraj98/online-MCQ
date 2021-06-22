@@ -1,5 +1,5 @@
 import express from 'express';
-import { AddCategory, AddSet, AdminLogin } from '../services/AdminService';
+import { AddCategory, AddSet, AdminLogin, getAllSet } from '../services/AdminService';
 import { fetchCatagory, getAllCategory } from '../services/GetDataServices';
 
 const router = express.Router();
@@ -51,5 +51,11 @@ router.post('/login', async (req, res) => {
     return res.render('adminLogin.ejs', { msg: 'username or password wrong' });
   }
 });
+
+router.get("/getSet",async(req,res)=>{
+  let AllSet = await getAllSet();
+  return res.send(AllSet);
+
+})
 
 export default router;

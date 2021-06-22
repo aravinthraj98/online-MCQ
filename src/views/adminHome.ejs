@@ -56,7 +56,7 @@
                     <button onclick="show(`AddQuestion`)" style="background-color:indigo;color:white;border:none;"
                         class="mycolor ml-4">
                         <i class="fa fa-fa fa-leanpub" style="font-size: 18px">
-                            <span class="mycolor ml-2">Add Set</span>
+                            <span class="mycolor ml-2">Add QUESTION Set</span>
                         </i>
                     </button>
                 </a>
@@ -104,13 +104,9 @@
                     <%}%>
                     <Form method="POST" id="AddQuestion" action="/fileupload" enctype="multipart/form-data"
                         style="display: '';">
-                        Add Set<br>
-                        <select class="form-control" id="selectCategory">
-                            <% for(i in results){ %>
-                    <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
-                    <% } %>
-                    </select><br>
-                    <input type="text" placeholder="setCode" class="form-control"><br>
+                        Add QUESTION Set<br>
+                      
+                  <select id="selectSet" name="setCode"></select>
                     <input type="text" placeholder="setName" class="form-control"><br>
                     <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
                         xlsx filled properly other wise the upload will be interrupted with error.But still the
@@ -121,20 +117,22 @@
 
                     </form>
                     <!-- method="POST" action="/addCatagory" -->
-                    <form style="display:none;"    id="AddSetForm">
+                    <form style="display:none;" id="AddSetForm">
                         <select class="form-control" name="categoryCode" id="SetcategoryCode" required>
                             <% for(i in results){ %>
-                            <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
-                            <% } %>
-                        </select><br>
-                        <input type="text" name="setCode" id="setCode" placeholder="setCode" class="form-control" required><br>
-                        <input type="text" name="setName" id="setName" placeholder="setName" class="form-control" required><br>
-                        <input type="text" name="setDescription" id=setDescription placeholder="setDescription" class="form-control"
-                            required><br>
-                        <input type="number" class="form-control" name="timeLimit" placeholder="time limit"
-                        id="timeLimit"
-                            required><br>
-                        <input type="submit" class="btn" style="background-color: indigo;color:white" id="AddNewSet" value="AddSet">
+                    <option value=<%= results[i]['categoryCode'] %>><%= results[i]['categoryName'] %></option>
+                    <% } %>
+                    </select><br>
+                    <input type="text" name="setCode" id="setCode" placeholder="setCode" class="form-control"
+                        required><br>
+                    <input type="text" name="setName" id="setName" placeholder="setName" class="form-control"
+                        required><br>
+                    <input type="text" name="setDescription" id=setDescription placeholder="setDescription"
+                        class="form-control" required><br>
+                    <input type="number" class="form-control" name="timeLimit" placeholder="time limit" id="timeLimit"
+                        required><br>
+                    <input type="submit" class="btn" style="background-color: indigo;color:white" id="AddNewSet"
+                        value="AddSet">
                     </form>
 
                     <form style="display:none;" id="AddCatForm">
@@ -170,65 +168,65 @@
     <script src=https://code.jquery.com/jquery-3.5.1.js></script>
     <script>
 
-      
-        $("#AddNewSet").click(function(e){
 
-    
+        $("#AddNewSet").click(function (e) {
+
+
             e.preventDefault();
-            
-            
-         AddSet();
-            
+
+
+            AddSet();
+
         })
 
-        function AddSet(){
+        function AddSet() {
             alert("post request");
-              let categoryCode = $("#SetcategoryCode").val();
+            let categoryCode = $("#SetcategoryCode").val();
             let setCode = $("#setCode").val();
             let setName = $("#setName").val();
             let setDescription = $("#setDescription").val();
             let timeLimit = $("#timeLimit").val();
             let data = {
-                "setCode":setCode,
-                "setName":setName,
-                "setDescription":setDescription,
-                 "timeLimit":timeLimit,
-                 "categoryCode":categoryCode
+                "setCode": setCode,
+                "setName": setName,
+                "setDescription": setDescription,
+                "timeLimit": timeLimit,
+                "categoryCode": categoryCode
             }
-         
+
             console.log(data);
             console.log(categoryCode);
             console.log(setCode);
             console.log(setName);
             console.log(setDescription);
-            if(setName==null){
+            if (setName == null) {
                 alert("sss");
 
-                return; 
+                return;
             }
-              $.post("/admin/addSet", {
-              setCode,
-              setName,
-              setDescription,
-              timeLimit,
-              categoryCode
+            $.post("/admin/addSet", {
+                setCode,
+                setName,
+                setDescription,
+                timeLimit,
+                categoryCode
 
             }, (data, status) => {
 
                 if (data == true) {
-                      
+
                     $("#setCode").val("");
-                  $("#setName").val("");
-             $("#setDescription").val("");
+                    $("#setName").val("");
+                    $("#setDescription").val("");
                     $("#timeLimit").val("");
-                  
+
                     alert("Set saved");
                 }
                 else {
                     alert(data);
                 }
             });
-  
+
 
         }
 
@@ -237,11 +235,11 @@
             addCatagory();
 
         });
-        
-        
+
+
         function addCatagory() {
             console.log("added");
-        
+
 
 
 
@@ -272,11 +270,24 @@
             $("#AddSetForm").css({ display: "none" });
 
         }
-        function show(id) {
+        async function show(id) {
             hideAll();
             $(`#${id}`).css({ display: "" });
 
+            if (id === "AddQuestion") {
+                await getSet();
+            }
 
+
+        }
+
+        async function getSet() {
+            $.get("/admin/getSet", {}, (data, status) => {
+                alert("requesting");
+                for (let i in data) {
+                    document.getElementById("selectSet").innerHTML += `<option value=${data[i].setCode}>${data[i].setCode + "-" + data[i].categoryCode}</option>`
+                }
+            })
         }
 
 
