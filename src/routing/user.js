@@ -1,6 +1,6 @@
 
 import express from "express"
-import { getAllCategory, getSet,fetchCategorySet } from "../services/GetDataServices";
+import { getAllCategory, getSet,fetchCategorySet, fetchQuestions } from "../services/GetDataServices";
 import { checkLogin, checkUser, newUser } from "../services/UserServices";
 
 
@@ -50,7 +50,30 @@ router.get('/catagory', async (req,res)=>{
 
 router.get("/set/:set",async(req,res)=>{
   if(!req.cookies.email) return res.redirect("/");
-  
+ let setCode = req.params.set;
+ let testMin = req.query.testMin;
+ let results = await fetchQuestions(setCode);
+     req.session.exam = 'writing';
+    req.session.cookie.maxAge = 100 * 1000;
+    console.log('session created');
+   return  res.render('testPage.ejs', { results, set:setCode, testMin });
+ 
+//  let questions = await
+    //  let questions = 
+  //  let query = findSet(set);
+  // connection.query(query, function (err, results) {
+  //   if (err) {
+  //     console.log(err.message);
+  //     console.log('no connection');
+  //   }
+
+  //   let testMin = 120;
+  //   req.session.exam = 'writing';
+  //   req.session.cookie.maxAge = 100 * 1000;
+  //   console.log('session created');
+
+  //   res.render('testPage.ejs', { results, set, testMin });
+  // });
   return res.send("starting test");
 })
 router.get("/:id",async (req,res)=>{

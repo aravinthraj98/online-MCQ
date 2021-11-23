@@ -3,6 +3,7 @@ import db, { sequelize } from '../../models';
 const Category = db.category;
 const CatagorySet = db.categorySet;
 const testDetail = db.testDetail;
+const questionSet = db.questionSet;
 let categoryData =[];
 // let categorySetData =[];
 async function fetchCatagory(){
@@ -59,7 +60,18 @@ async function getSet(setCode){
    
  console.log(set); 
 }
-export {fetchCatagory,getAllCategory,getSet,fetchCategorySet};
+async function fetchQuestions(setCode){
+      let data = await questionSet.findAll({where:{
+          setCode:setCode
+      }});
+        let tempData =[];
+      for( let i in data){
+        tempData.push(data[i].dataValues);
+    }
+    console.log(tempData);
+    return tempData;
+}
+export {fetchCatagory,getAllCategory,getSet,fetchCategorySet,fetchQuestions};
 
 
 // const res = sequelize.query(`SELECT * FROM cities 

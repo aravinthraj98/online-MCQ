@@ -51,6 +51,15 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+    setCode:{
+            type: DataTypes.STRING,
+            allowNull: false,
+              references:{
+               model:'categorysets',
+               key:'setCode'
+      }
+     
+    }
   });
   return question;
 };
