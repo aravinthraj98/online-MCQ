@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Set = sequelize.define('categorySet', {
+  const categorySet = sequelize.define('categorySet', {
     setCode: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -37,5 +37,5 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
-  return Set;
+  return categorySet;
 };

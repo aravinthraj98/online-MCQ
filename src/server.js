@@ -110,9 +110,16 @@ app.get('/cor', (req, res) => {
 // app.get('/:cat/:set', showSet);
 
 // app.post('/:cat/submit', checkAnswer);
+ 
 db.sequelize.sync().then((req) => {
   app.listen(3323, () => {
     fetchCatagory();
+      db.sequelize.queryInterface.addConstraint('testDetails', {
+  fields: ['setCode', 'email'],
+  type: 'Primary Key',
+  name: 'setDetail_pk'
+});
+ 
     console.log(`http://localhost:3323`);
   });
 

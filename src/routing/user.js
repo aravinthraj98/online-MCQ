@@ -1,6 +1,6 @@
 
 import express from "express"
-import { getAllCategory } from "../services/GetDataServices";
+import { getAllCategory, getSet,fetchCategorySet } from "../services/GetDataServices";
 import { checkLogin, checkUser, newUser } from "../services/UserServices";
 
 
@@ -41,10 +41,22 @@ router.post('/signup', async (req, res) => {
   return res.redirect('/catagory');
 });
 
-router.get('/catagory', (req,res)=>{
+router.get('/catagory', async (req,res)=>{
   if(!req.cookies.email) return res.redirect("/");
-       let listCat=getAllCategory();
-       console.log(listCat);
+       let listCat=await getAllCategory();
+      //  console.log(listCat);
  return res.render('CatagoryView.ejs', { list: listCat });
 });
+
+router.get("/set/:set",async(req,res)=>{
+  if(!req.cookies.email) return res.redirect("/");
+  
+  return res.send("starting test");
+})
+router.get("/:id",async (req,res)=>{
+  let id = req.params.id;
+  let data = await fetchCategorySet(id,req.cookies.email);
+  return res.render("SetView.ejs",{results:data})
+  // return res.send(id)
+})
 export default router;

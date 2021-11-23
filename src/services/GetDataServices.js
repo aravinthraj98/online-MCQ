@@ -1,6 +1,10 @@
-import db from '../../models';
+import { Op } from 'sequelize';
+import db, { sequelize } from '../../models';
 const Category = db.category;
+const CatagorySet = db.categorySet;
+const testDetail = db.testDetail;
 let categoryData =[];
+// let categorySetData =[];
 async function fetchCatagory(){
     let allCatagory =await Category.findAll();
     let tempData=[];
@@ -12,8 +16,55 @@ async function fetchCatagory(){
     
 
 }
-function getAllCategory(){
-    
-    return categoryData;
+async function getAllCategory(){
+  if(categoryData.length>0){
+      return categoryData;
+  }
+  await fetchCatagory();
+    return  categoryData;
+
 }
-export {fetchCatagory,getAllCategory};
+async function fetchCategorySet(categoryCode,email){
+    // let testResult = sequelize.dialect.QueryGenerator.selectQuery('testDetails',
+    // {
+    //     attributes: ['setCode'],
+    //     where: {
+    //          email:email
+    //     }
+    // })
+    // .slice(0,-1);
+    let testDetailquery =`select setCode from testDetails where email="${email}"`
+    // let categorySet = await CatagorySet.findAll({where:{
+    //     categoryCode:categoryCode
+    // }})
+      let categorySet = await CatagorySet.findAll({
+          where:{
+              setCode:{
+                  [Op.notIn]:sequelize.literal('('+testDetailquery+')')
+              }
+          }
+      });
+      console.log(categorySet);
+    let tempData =[];
+      for( let i in categorySet){
+        tempData.push(categorySet[i].dataValues);
+    }
+    console.log(tempData);
+    return tempData;
+
+}
+async function getSet(setCode){
+    console.log(setCode);
+ let set =await CatagorySet.findAll();
+   
+ console.log(set); 
+}
+export {fetchCatagory,getAllCategory,getSet,fetchCategorySet};
+
+
+// const res = sequelize.query(`SELECT * FROM cities 
+//   WHERE country_id IN (SELECT id FROM countries WHERE lang = $lang)`, {
+//   type: Sequelize.QueryTypes.SELECT,
+//   bind: {
+//      lang: 'French'
+//});
