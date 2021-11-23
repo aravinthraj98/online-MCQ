@@ -42,11 +42,11 @@ Object.keys(db).forEach((modelName) => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-db.category.hasMany(db.categorySet,{foreignKey:"categoryCode",sourceKey:"categoryCode"});
-db.categorySet.belongsTo(db.category,{foreignKey:"categoryCode",sourceKey:"categoryCode"});
-// db.category.hasMany(db.categorySet, {as: 'categoryCode'});
-// db.categorySet.hasOne(db.category, {as: 'categoryCode'});
-db.categorySet.hasMany(db.questionSet);
-db.questionSet.belongsTo(db.categorySet);
+// db.category.hasMany(db.categorySet,{foreignKey:"categoryCode",sourceKey:"categoryCode"});
+// db.categorySet.belongsTo(db.category,{foreignKey:"categoryCode",sourceKey:"categoryCode"});
+// // db.category.hasMany(db.categorySet, {as: 'categoryCode'});
+// // db.categorySet.hasOne(db.category, {as: 'categoryCode'});
+// db.categorySet.hasMany(db.questionSet);
+// db.questionSet.belongsTo(db.categorySet);
 
 module.exports = db;
