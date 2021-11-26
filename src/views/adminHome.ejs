@@ -28,42 +28,43 @@
 </head>
 
 <body>
+    <%- include('./header'); %>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
-        <div class="border-right" id="sidebar-wrapper" style="background-color: indigo;color:ivory">
+        <div class="border-right" id="sidebar-wrapper" style="background-color: #543a7ce3;color:ivory">
             <span class="badge badge-dark navbar-brand sidebar-heading">ADMIN</span>
-            <div class="list-group list-group-flush" style="background-color: indigo;">
-                <a class="list-group-item list-group-item-action" style="background-color: indigo;">
+            <div class="list-group list-group-flush" style="background-color: #543a7ce3;">
+                <a class="list-group-item list-group-item-action" style="background-color: #543a7ce3;">
                     <div class="mycolor" id="profile">
-                        <i class="fa fa-user" style="font-size: 18px" class="mr-4">
+                        <!-- <i class="fa fa-user" style="font-size: 18px" class="mr-4"> -->
                             <span class="ml-2">Profile</span>
-                        </i>
+                        <!-- </i> -->
                     </div>
                 </a>
                 <a href="#" data-toggle="modal" data-target="#detailsModal"
-                    class="list-group-item list-group-item-action " style="background-color: indigo;" id="detail">
-                    <button onclick="show(`AddCatForm`)" style="background-color:indigo;color:white;border:none;"
+                    class="list-group-item list-group-item-action p-2 mt-1 " style="background-color: #543a7ce3;" id="detail">
+                    <button onclick="show(`AddCatForm`)" style="background-color:#543a7ce3;color:white;border:none;"
                         class="mycolor ml-4">Add
                         Catagory</button>
                 </a>
                 <!-- <a href="#" data-toggle="modal" data-target="#pwdModal" class="list-group-item list-group-item-action "
-                    style="background-color: indigo;" id="changepassword">
-                    <button style="background-color:indigo;color:white;border:none;" class="mycolor ml-4">Add
+                    style="background-color: #543a7ce3;" id="changepassword">
+                    <button style="background-color:#543a7ce3;color:white;border:none;" class="mycolor ml-4">Add
                         Set</button>
                 </a> -->
                 <a href="#" data-toggle="modal" data-target="#complaintModal"
-                    class="list-group-item list-group-item-action " style="background-color: indigo;">
-                    <button onclick="show(`AddQuestion`)" style="background-color:indigo;color:white;border:none;"
-                        class="mycolor ml-4">
-                        <i class="fa fa-fa fa-leanpub" style="font-size: 18px">
-                            <span class="mycolor ml-2">Add QUESTION Set</span>
-                        </i>
+                    class="list-group-item list-group-item-action mt-2" style="background-color: #543a7ce3;">
+                    <button onclick="show(`AddQuestion`)" style="background-color:#543a7ce3;color:white;border:none;"
+                        class="mycolor">
+                      
+                            <span class="mycolor ">Add QUESTION Set</span>
+                     
                     </button>
                 </a>
                 <a data-toggle="modal" data-target="#casesModal" class="list-group-item list-group-item-action"
-                    style="background-color: indigo;">
-                    <button onclick="show(`AddSetForm`)" style="background-color:indigo;color:white;border:none;"
-                        class="mycolor ml-4">
+                    style="background-color: #543a7ce3;">
+                    <button onclick="show(`AddSetForm`)" style="background-color:#543a7ce3;color:white;border:none;"
+                        class="mycolor">
 
 
                         <i class="fa fa-exclamation-triangle " style="font-size: 18px">
@@ -72,7 +73,7 @@
                     </button>
                 </a>
                 <a href="/api/user/logout" class="list-group-item list-group-item-action "
-                    style="background-color: indigo;">
+                    style="background-color: #543a7ce3;">
 
                     <i class="fa fa-sign-out" style="font-size: 18px">
                         <span class="mycolor ml-2">Logout</span>
@@ -106,14 +107,16 @@
                         style="display: '';">
                         Add QUESTION Set<br>
                       
-                  <select id="selectSet" style="display: none;" name="setCode"></select>
+                  <select id="selectSet" class="form-control"  name="setCode" required></select>
                     <!-- <input type="text" placeholder="setName" class="form-control"><br>
                     <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
                         xlsx filled properly other wise the upload will be interrupted with error.But still the
                         cells which already above the error row will be uploaded..</i><br> -->
+
                         1st row fields question,option_A,option_B,option_C,option_D,answer,setCode
+
                     <input type="file" name="filetoupload" accept=".xlsx" />
-                    <input type="submit" id="addSet" class="btn" style="background-color: indigo;" />
+                    <input type="submit" id="addSet" class="btn" style="background-color: #543a7ce3;" />
 
 
                     </form>
@@ -132,7 +135,7 @@
                         class="form-control" required><br>
                     <input type="number" class="form-control" name="timeLimit" placeholder="time limit" id="timeLimit"
                         required><br>
-                    <input type="submit" class="btn" style="background-color: indigo;color:white" id="AddNewSet"
+                    <input type="submit" class="btn" style="background-color: #543a7ce3;color:white" id="AddNewSet"
                         value="AddSet">
                     </form>
 
@@ -141,7 +144,7 @@
                         <input type="text" placeholder="catagoryCode" id="catagoryCode" class="form-control"><br>
                         <input type="text" placeholder="catagoryName" id="catagoryName" class="form-control"><br>
                         <input type="submit" value="addCatagory" id="addCatagory" class="btn"
-                            style="background-color: indigo;color:white" />
+                            style="background-color: #543a7ce3;color:white" />
 
 
                     </form>
@@ -178,7 +181,8 @@
 
             AddSet();
 
-        })
+        });
+        getSet();
 
         function AddSet() {
             alert("post request");
@@ -285,10 +289,15 @@
         async function getSet() {
             $.get("/admin/getSet", {}, (data, status) => {
                 alert("requesting");
+                document.getElementById("selectSet").innerHTML += `<option value=${data[0].setCode}>${data[0].setCode}</option>`
                 for (let i in data) {
-                    document.getElementById("selectSet").innerHTML += `<option value=${data[i].setCode}>${data[i].setCode + "-" + data[i].categoryCode}</option>`
+                    if(i==0)continue;
+                    document.getElementById("selectSet").innerHTML += `<option value=${data[i].setCode}>${data[i].setCode}</option>`
                 }
             })
+        }
+        async function getCategory(){
+            
         }
 
 

@@ -69,6 +69,9 @@ router.post('/fileupload', (req, res, next) => {
   var form = new formidable.IncomingForm();
 
   form.parse(req, function (err, fields, files) {
+    // console.log(fields);
+    req.body = fields;
+    // console.log({ fields });
     var oldpath = files.filetoupload.path;
     console.log(oldpath);
     var newpath = path.join('./assets/' + 'upload.xlsx');
@@ -91,6 +94,8 @@ router.post('/fileupload', async (req, res) => {
   // let bulkInsert = [];
   let result = [];
   let isInserted = false;
+  let setCode = req.body.setCode;
+  console.log(setCode);
   await xlsxFile(getFile).then(async (row) => {
     let header = row[0];
 
@@ -101,6 +106,11 @@ router.post('/fileupload', async (req, res) => {
         if (header[j] == 'answer') {
           newRow[header[j]] = newRow[row[i][j]];
         } else newRow[header[j]] = row[i][j];
+      }
+      // setCode = 'aa';
+      if (newRow['setCode'] != setCode) {
+        isInserted = false;
+        return;
       }
       result.push(newRow);
     }
@@ -118,7 +128,7 @@ router.post('/fileupload', async (req, res) => {
   });
   // console.log('Helooooooooo');
   if (isInserted == true) return res.send('Inserted');
-  res.send('hello');
+  res.send('some error occured');
   // return res.send('Not inserted');
 });
 

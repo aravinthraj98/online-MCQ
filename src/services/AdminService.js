@@ -41,12 +41,13 @@ async function AddSet(
   }
 }
 
-async function getAllSet(){
-  let Set=await set.findAll();
-  let AllSet=[];
-  for(let i in Set){
-      AllSet.push(Set[i].dataValues);
+async function getAllSet() {
+  let Set = await set.findAll();
+  let AllSet = [];
+  for (let i in Set) {
+    AllSet.push(Set[i].dataValues);
   }
+  console.log(AllSet);
   return AllSet;
 }
-export { AdminLogin, AddCategory, AddSet,getAllSet };
+export { AdminLogin, AddCategory, AddSet, getAllSet };
