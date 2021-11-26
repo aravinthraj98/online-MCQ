@@ -1,10 +1,19 @@
+import express from 'express';
+import { saveResult } from '../database/query';
+import {
+  getAllCategory,
+  getSet,
+  fetchCategorySet,
+  fetchQuestions,
+} from '../services/GetDataServices';
+import {
+  checkLogin,
+  checkUser,
+  newUser,
+  saveTest,
+} from '../services/UserServices';
 
-import express from "express"
-import { getAllCategory, getSet,fetchCategorySet, fetchQuestions } from "../services/GetDataServices";
-import { checkLogin, checkUser, newUser } from "../services/UserServices";
-
-
-const router =express.Router();
+const router = express.Router();
 router.get('/', (req, res) => {
   res.render('home.ejs');
 });
@@ -38,28 +47,71 @@ router.post('/signup', async (req, res) => {
   } else {
     await newUser(email, name, password);
   }
+  res.cookie('email', email);
   return res.redirect('/catagory');
 });
 
-router.get('/catagory', async (req,res)=>{
-  if(!req.cookies.email) return res.redirect("/");
-       let listCat=await getAllCategory();
-      //  console.log(listCat);
- return res.render('CatagoryView.ejs', { list: listCat });
+router.get('/catagory', async (req, res) => {
+  if (!req.cookies.email) return res.redirect('/');
+
+  let listCat = await getAllCategory();
+  let msg = 'Welcome!!';
+  console.log(req.query.noquestion);
+  if (req.query.noquestion == 'true') {
+    msg = 'The test you willing to take is no longer available';
+  }
+  //  emconsole.log(listCat);
+  return res.render('CatagoryView.ejs', { list: listCat, msg });
+});
+router.post('/submitTest', async (req, res) => {
+  if (req.session.exam === 'writing' && req.session.cookie.maxAge) {
+    let setCode = req.body.setCode;
+    let results = await fetchQuestions(setCode);
+    let correct = 0;
+    let wrong = 0;
+    for (let i in results) {
+      if (
+        req.body[results[i].questionCode] &&
+        req.body[results[i].questionCode] == results[i].answer
+      ) {
+        correct++;
+      } else {
+        wrong++;
+      }
+    }
+    console.log(req.cookies.email);
+    let data = {
+      email: req.cookies.email,
+      testScore: (correct / (correct + wrong)) * 100,
+      testTime: req.session.time - req.session.cookie.maxAge / (60 * 1000),
+
+      setCode: setCode,
+    };
+    let isSaved = await saveTest(data);
+    console.log({ isSaved });
+    if (!isSaved) return res.send('some error occured ,please try again later');
+    req.session.destroy();
+
+    return res.render('resultView', { setCode, correct, wrong });
+  }
+
+  return res.send('No test');
 });
 
-router.get("/set/:set",async(req,res)=>{
-  if(!req.cookies.email) return res.redirect("/");
- let setCode = req.params.set;
- let testMin = req.query.testMin;
- let results = await fetchQuestions(setCode);
-     req.session.exam = 'writing';
-    req.session.cookie.maxAge = 100 * 1000;
-    console.log('session created');
-   return  res.render('testPage.ejs', { results, set:setCode, testMin });
- 
-//  let questions = await
-    //  let questions = 
+router.get('/category/set/:set', async (req, res) => {
+  if (!req.cookies.email) return res.redirect('/');
+  let setCode = req.params.set;
+  let testMin = req.query.testMin;
+  let results = await fetchQuestions(setCode);
+  if (results.length <= 0) return res.redirect('/catagory?noquestion=true');
+  req.session.exam = 'writing';
+  req.session.time = testMin;
+  req.session.cookie.maxAge = testMin * 60 * 1000;
+  console.log('session created');
+  return res.render('testPage.ejs', { results, set: setCode, testMin });
+
+  //  let questions = await
+  //  let questions =
   //  let query = findSet(set);
   // connection.query(query, function (err, results) {
   //   if (err) {
@@ -74,12 +126,12 @@ router.get("/set/:set",async(req,res)=>{
 
   //   res.render('testPage.ejs', { results, set, testMin });
   // });
-  return res.send("starting test");
-})
-router.get("/:id",async (req,res)=>{
+  return res.send('starting test');
+});
+router.get('/category/:id', async (req, res) => {
   let id = req.params.id;
-  let data = await fetchCategorySet(id,req.cookies.email);
-  return res.render("SetView.ejs",{results:data})
+  let data = await fetchCategorySet(id, req.cookies.email);
+  return res.render('SetView.ejs', { results: data });
   // return res.send(id)
-})
+});
 export default router;

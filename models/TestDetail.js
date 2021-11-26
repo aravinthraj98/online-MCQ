@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       references:{
           model:'categorysets',
-          key:'setCode'
+          key:'setCode',
+          sonDelete: 'cascade',
       }
      
     },

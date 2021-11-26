@@ -25,6 +25,7 @@ import { checkLogin } from './services/UserServices';
 import MountApp from './routing';
 
 const app = express();
+const questionSet = db.questionSet;
 
 app.set('view engine', 'ejs');
 app.use('/assets', express.static('assets'));
@@ -84,17 +85,30 @@ app.post('/fileupload', (req, res, next) => {
 
 app.post('/fileupload', (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
-
+  // let bulkInsert = [];
+  let result = [];
   xlsxFile(getFile).then((row) => {
-    console.log(row);
-  });
-  let getcat = findAllCatagory();
+    let header = row[0];
 
-  connection.query(getcat, function (err, results) {
-    if (err) console.log(err);
-    console.log(results);
-    return res.render('adminHome.ejs', { results: results });
+    for (let i in row) {
+      if (i == 0) continue;
+      let newRow = {};
+      for (let j in row[i]) {
+        newRow[header[j]] = row[i][j];
+      }
+      result.push(newRow);
+    }
+    console.log(result);
+    questionSet.bulkCreate(result).then(() => res.send('inserted'));
   });
+  return res.send('Not inserted');
+  // let getcat = findAllCatagory();
+
+  // connection.query(getcat, function (err, results) {
+  //   if (err) console.log(err);
+  //   console.log(results);
+  //   return res.render('adminHome.ejs', { results: results });
+  // });
 
   // connection.query(query, function (err, results) {
   //   if (err) console.log(err);
@@ -110,16 +124,16 @@ app.get('/cor', (req, res) => {
 // app.get('/:cat/:set', showSet);
 
 // app.post('/:cat/submit', checkAnswer);
- 
+
 db.sequelize.sync().then((req) => {
   app.listen(3323, () => {
     fetchCatagory();
-      db.sequelize.queryInterface.addConstraint('testDetails', {
-  fields: ['setCode', 'email'],
-  type: 'Primary Key',
-  name: 'setDetail_pk'
-});
- 
+    db.sequelize.queryInterface.addConstraint('testDetails', {
+      fields: ['setCode', 'email'],
+      type: 'Primary Key',
+      name: 'setDetail_pk',
+    });
+
     console.log(`http://localhost:3323`);
   });
 

@@ -32,6 +32,7 @@
 
 <body>
   <div class="container-fluid" style="background:whitesmoke;height:100vh">
+    <div class="alert alert-info text-center m-2 p-2 "><%= msg %></div>
     <div class="row p-4">
       <% for(i in list){ %>
       <div class=" col-md-4" style="margin-top: 2%;">
@@ -43,7 +44,7 @@
 
           </div>
           <div class=" card-footer  text-center border-light" id=bg-color>
-            <a class="none" href=/<%= list[i]["categoryCode"] %>>
+            <a class="none" href=/category/<%= list[i]["categoryCode"] %>>
               View Catagory
             </a>
 

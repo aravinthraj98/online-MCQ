@@ -1,16 +1,17 @@
 module.exports = (sequelize, DataTypes) => {
   const question = sequelize.define('questionSet', {
     questionCode: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
+      autoIncrement: true,
       validate: {
         notEmpty: true,
       },
     },
     question: {
-      type: DataTypes.INTEGER,
-      autoincrement: true,
+      type: DataTypes.STRING,
+
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -51,15 +52,15 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    setCode:{
-            type: DataTypes.STRING,
-            allowNull: false,
-              references:{
-               model:'categorysets',
-               key:'setCode'
-      }
-     
-    }
+    setCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: {
+        model: 'categorysets',
+        key: 'setCode',
+        onDelete: 'cascade',
+      },
+    },
   });
   return question;
 };

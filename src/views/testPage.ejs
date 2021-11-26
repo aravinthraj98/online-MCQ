@@ -35,7 +35,7 @@
           
                 <div class="carousel-item active" id=bg-color>
                   <p class="font-weight-bold text-center">INSTRUCTIONS</p></div>
-                    <form action="submit" method="POST" name="submitAnswer">
+                    <form action="/submitTest" method="POST" name="submitAnswer">
                
                   <% for(i in results) { %>
                   <div class="carousel-item">
@@ -43,13 +43,13 @@
             
                     <h5><%= results[i]["question"] %></h5><br>
                     <input type="radio" value='<%= results[i]["option_A"] %>'
-                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_A"] %><br>
+                      name='<%= results[i]["questionCode"] %>'>  <%= results[i]["option_A"] %><br>
                     <input type="radio" value='<%= results[i]["option_B"]  %>'
-                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_B"] %><br>
+                      name='<%= results[i]["questionCode"] %>'>  <%= results[i]["option_B"] %><br>
                     <input type="radio" value='<%= results[i]["option_C"] %>'
-                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_C"] %><br>
+                      name='<%= results[i]["questionCode"] %>'>  <%= results[i]["option_C"] %><br>
                     <input type="radio" value='<%= results[i]["option_D"] %>'
-                      name='<%= results[i]["question"] %>'>  <%= results[i]["option_D"] %><br>
+                      name='<%= results[i]["questionCode"] %>'>  <%= results[i]["option_D"] %><br>
             
             
             
@@ -93,7 +93,7 @@
         let testMin ='<%- testMin %>';
         let count=0;
         let seconds=60;
-         let minute = testMin / 60 - 1;
+         let minute = testMin-1;
         setInterval(()=>{
          
           
@@ -116,7 +116,7 @@
           console.log("clicked");
           $('#submitExam').click();
 
-        },testMin*1000)
+        },testMin*60*1000)
         
         
 

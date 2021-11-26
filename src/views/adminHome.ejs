@@ -102,15 +102,16 @@
                     <% if(locals.msg) {%>
                     <p class="text-center alert alert-info"><%= msg %></p>
                     <%}%>
-                    <Form method="POST" id="AddQuestion" action="/fileupload" enctype="multipart/form-data"
+                    <Form method="POST" id="AddQuestion" action="/admin/fileupload" enctype="multipart/form-data"
                         style="display: '';">
                         Add QUESTION Set<br>
                       
-                  <select id="selectSet" name="setCode"></select>
-                    <input type="text" placeholder="setName" class="form-control"><br>
+                  <select id="selectSet" style="display: none;" name="setCode"></select>
+                    <!-- <input type="text" placeholder="setName" class="form-control"><br>
                     <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
                         xlsx filled properly other wise the upload will be interrupted with error.But still the
-                        cells which already above the error row will be uploaded..</i><br>
+                        cells which already above the error row will be uploaded..</i><br> -->
+                        1st row fields question,option_A,option_B,option_C,option_D,answer,setCode
                     <input type="file" name="filetoupload" accept=".xlsx" />
                     <input type="submit" id="addSet" class="btn" style="background-color: indigo;" />
 

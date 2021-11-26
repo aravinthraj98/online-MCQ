@@ -1,9 +1,18 @@
 import express from 'express';
-import { AddCategory, AddSet, AdminLogin, getAllSet } from '../services/AdminService';
+import {
+  AddCategory,
+  AddSet,
+  AdminLogin,
+  getAllSet,
+} from '../services/AdminService';
 import { fetchCatagory, getAllCategory } from '../services/GetDataServices';
-
+import formidable from 'formidable';
+import path from 'path';
+import fs from 'fs';
+import db from '../../models';
+const questionSet = db.questionSet;
 const router = express.Router();
-
+const xlsxFile = require('read-excel-file/node');
 router.post('/addCatagory', async (req, res) => {
   let catagoryCode = req.body.catagoryCode;
   let catagoryName = req.body.catagoryName;
@@ -52,10 +61,65 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get("/getSet",async(req,res)=>{
+router.get('/getSet', async (req, res) => {
   let AllSet = await getAllSet();
   return res.send(AllSet);
+});
+router.post('/fileupload', (req, res, next) => {
+  var form = new formidable.IncomingForm();
 
-})
+  form.parse(req, function (err, fields, files) {
+    var oldpath = files.filetoupload.path;
+    console.log(oldpath);
+    var newpath = path.join('./assets/' + 'upload.xlsx');
+    console.log(newpath);
+    try {
+      fs.rename(oldpath, newpath, function (err) {
+        if (err) console.log(err);
+        next();
+
+        // return res.send('file uploadedddd');
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  });
+});
+
+router.post('/fileupload', async (req, res) => {
+  let getFile = path.join('./assets/upload.xlsx');
+  // let bulkInsert = [];
+  let result = [];
+  let isInserted = false;
+  await xlsxFile(getFile).then(async (row) => {
+    let header = row[0];
+
+    for (let i in row) {
+      if (i == 0) continue;
+      let newRow = {};
+      for (let j in row[i]) {
+        if (header[j] == 'answer') {
+          newRow[header[j]] = newRow[row[i][j]];
+        } else newRow[header[j]] = row[i][j];
+      }
+      result.push(newRow);
+    }
+    console.log(result);
+    try {
+      isInserted = await questionSet.bulkCreate(result).then((res) => {
+        return true;
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    // console.log(isInserted);
+
+    // console.log(isInserted);
+  });
+  // console.log('Helooooooooo');
+  if (isInserted == true) return res.send('Inserted');
+  res.send('hello');
+  // return res.send('Not inserted');
+});
 
 export default router;
