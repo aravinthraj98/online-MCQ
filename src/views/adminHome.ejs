@@ -28,19 +28,19 @@
 </head>
 
 <body>
-    <%- include('./header'); %>
+ 
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper" style="background-color: #543a7ce3;color:ivory">
             <span class="badge badge-dark navbar-brand sidebar-heading">ADMIN</span>
             <div class="list-group list-group-flush" style="background-color: #543a7ce3;">
-                <a class="list-group-item list-group-item-action" style="background-color: #543a7ce3;">
+                <!-- <a class="list-group-item list-group-item-action" style="background-color: #543a7ce3;">
                     <div class="mycolor" id="profile">
-                        <!-- <i class="fa fa-user" style="font-size: 18px" class="mr-4"> -->
-                            <span class="ml-2">Profile</span>
+                        <!- <i class="fa fa-user" style="font-size: 18px" class="mr-4"> -->
+                            <!-- <span class="ml-2"></span> -->
                         <!-- </i> -->
-                    </div>
-                </a>
+                    <!-- </div>
+                </a> -->
                 <a href="#" data-toggle="modal" data-target="#detailsModal"
                     class="list-group-item list-group-item-action p-2 mt-1 " style="background-color: #543a7ce3;" id="detail">
                     <button onclick="show(`AddCatForm`)" style="background-color:#543a7ce3;color:white;border:none;"
@@ -282,6 +282,9 @@
             if (id === "AddQuestion") {
                 await getSet();
             }
+            if(id ==="AddSetForm"){
+                await getCategory();
+            }
 
 
         }
@@ -297,6 +300,15 @@
             })
         }
         async function getCategory(){
+            $.get("/admin/getCategory",(data,status)=>{
+                   document.getElementById("selectSet").innerHTML += `<option value=${data[0].setCode}>${data[0].setCode}</option>`
+                for (let i in data) {
+                    if (i == 0) continue;
+                    document.getElementById("selectSet").innerHTML += `<option value=${data[i].setCode}>${data[i].setCode}</option>`
+                }
+            }
+
+                )
             
         }
 

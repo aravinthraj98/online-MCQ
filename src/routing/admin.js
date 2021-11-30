@@ -53,7 +53,7 @@ router.post('/login', async (req, res) => {
   let password = req.body.password;
   let isadmin = await AdminLogin(username, password);
   console.log(isadmin);
-  let listCat = getAllCategory();
+  let listCat = await getAllCategory();
   if (isadmin) {
     return res.render('adminHome.ejs', { results: listCat });
   } else {
@@ -88,7 +88,10 @@ router.post('/fileupload', (req, res, next) => {
     }
   });
 });
-
+router.get('/getCategory', async (req, res) => {
+  let getCat = await getAllCategory();
+  res.send(getCat);
+});
 router.post('/fileupload', async (req, res) => {
   let getFile = path.join('./assets/upload.xlsx');
   // let bulkInsert = [];
