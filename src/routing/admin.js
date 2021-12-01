@@ -31,18 +31,26 @@ router.post('/addSet', async (req, res) => {
   let categoryCode = req.body.categoryCode;
   console.log(categoryCode);
   let timeLimit = req.body.timeLimit;
-  let isSet = await AddSet(
-    setCode,
-    setName,
-    setDescription,
-    timeLimit,
-    categoryCode
-  );
-  let listCat = getAllCategory();
-  if (isSet) {
-    return res.send(true);
-  } else {
-    return res.send(false);
+  try {
+    let isSet = await AddSet(
+      setCode,
+      setName,
+      setDescription,
+      timeLimit,
+      categoryCode
+    );
+    let listCat = getAllCategory();
+    if (isSet) {
+      return res.send(true);
+    } else {
+      return res.send(false);
+    }
+  } catch (err) {
+    console.log({ err: err.parent.errno });
+    if (err.parent.errno == 1062) {
+      return res.send('Alreadt set number exist');
+    }
+    return res.send('some error occured');
   }
 });
 router.get('/', (req, res) => {
