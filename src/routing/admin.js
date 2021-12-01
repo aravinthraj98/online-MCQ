@@ -16,11 +16,19 @@ const xlsxFile = require('read-excel-file/node');
 router.post('/addCatagory', async (req, res) => {
   let catagoryCode = req.body.catagoryCode;
   let catagoryName = req.body.catagoryName;
-  let isCreate = await AddCategory(catagoryCode, catagoryName);
-  if (isCreate) {
-    await fetchCatagory();
+  try {
+    let isCreate = await AddCategory(catagoryCode, catagoryName);
+
+    if (isCreate) {
+      await fetchCatagory();
+    }
+    return res.send(isCreate);
+  } catch (err) {
+    if (err.parent.errno == 1062) {
+      return res.send('All ready category code present');
+    }
+    return false;
   }
-  return res.send(isCreate);
 });
 
 router.post('/addSet', async (req, res) => {
