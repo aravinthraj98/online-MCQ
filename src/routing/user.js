@@ -5,6 +5,7 @@ import {
   getSet,
   fetchCategorySet,
   fetchQuestions,
+  fetchTestDetail,
 } from '../services/GetDataServices';
 import {
   checkLogin,
@@ -133,5 +134,11 @@ router.get('/category/:id', async (req, res) => {
   let data = await fetchCategorySet(id, req.cookies.email);
   return res.render('SetView.ejs', { results: data });
   // return res.send(id)
+});
+
+router.get('/testDetail', async (req, res) => {
+  if (!req.cookies.email) return res.redirect('/');
+  let data = await fetchTestDetail(req.cookies.email);
+  return res.render('testDetail.ejs', { data: data });
 });
 export default router;

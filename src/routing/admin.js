@@ -28,6 +28,8 @@ router.post('/addCatagory', async (req, res) => {
       return res.send('All ready category code present');
     }
     return false;
+
+    
   }
 });
 

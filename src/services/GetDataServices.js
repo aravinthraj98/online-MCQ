@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, TimeoutError, where } from 'sequelize';
 import db, { sequelize } from '../../models';
 const Category = db.category;
 const CatagorySet = db.categorySet;
@@ -71,7 +71,18 @@ async function fetchQuestions(setCode){
     console.log(tempData);
     return tempData;
 }
-export {fetchCatagory,getAllCategory,getSet,fetchCategorySet,fetchQuestions};
+async function fetchTestDetail(email){
+    let data = await testDetail.findAll({where:{
+        email:email
+    }});
+        let tempData = [];
+        for (let i in data) {
+          tempData.push(data[i].dataValues);
+        }
+        return tempData;
+
+}
+export {fetchCatagory,getAllCategory,getSet,fetchCategorySet,fetchQuestions,fetchTestDetail};
 
 
 // const res = sequelize.query(`SELECT * FROM cities 
