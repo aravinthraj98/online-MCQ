@@ -10,18 +10,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
-      <div class="container-fluid h-100 bg-dark" style="min-height: 100vh;">
-       <div class="row">
+      <div class="container-fluid h-100 bg-dark p-2  col-md-12" style="min-height: 100vh;">
+       <div class="row p-4">
            <% for (i in data){ %>
-          <div class="col-md bg-light">
-          setCode:  <%= data[i].setCode %><br>
-           time Taken:<%= data[i].testTime %>
-           your score: <%= data[i].testScore %> %
+          <div class="col-md-3 p-2 " >
+            <div class="p-2 " style="border-width: 1px;border-radius:10px;background-color:white;color:indigo" >
+
+           
+          setCode: <b><%= data[i].setCode %></b> <br>
+           time Taken:<b><%= data[i].testTime %></b><br>
+           your score:<b><%= data[i].testScore %> %</b> 
+           <br />
+           <button type="button" class="btn btn-success p-2 m-2" style="background-color: indigo;">click to see answer</button>
+            </div>
 
           </div>
            <% } %>
        </div>
-      </div>
+      </div> 
       
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

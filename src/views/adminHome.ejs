@@ -290,6 +290,7 @@
         }
 
         async function getSet() {
+            document.getElementById("selectSet").innerHTML="";
             $.get("/admin/getSet", {}, (data, status) => {
                 alert("requesting");
                 document.getElementById("selectSet").innerHTML += `<option value=${data[0].setCode}>${data[0].setCode}</option>`
