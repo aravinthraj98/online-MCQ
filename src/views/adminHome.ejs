@@ -28,8 +28,14 @@
 </head>
 
 <body>
- 
+    <!-- <% if(locals.msg) { %>
+           <p class="form-control alert alert-info"><%= msg %></p>
+        <% } %>
+
+        
+  -->
     <div class="d-flex" id="wrapper">
+        
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper" style="background-color: #543a7ce3;color:ivory">
             <span class="badge badge-dark navbar-brand sidebar-heading">ADMIN</span>
@@ -72,7 +78,7 @@
                         </i>
                     </button>
                 </a>
-                <a href="/api/user/logout" class="list-group-item list-group-item-action "
+                <a href="\..\logout" class="list-group-item list-group-item-action "
                     style="background-color: #543a7ce3;">
 
                     <i class="fa fa-sign-out" style="font-size: 18px">
@@ -80,6 +86,11 @@
                     </i>
                     </button>
                 </a>
+                <form action="getTestDetail" style="padding:10px
+                " method="post">
+                    <input class="form-control m-2" placeholder="search user" name="email" type="search">
+                    <input type="submit" class="btn btn-success">
+                </form>
             </div>
         </div>
 

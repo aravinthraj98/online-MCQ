@@ -16,7 +16,16 @@ import {
 
 const router = express.Router();
 router.get('/', (req, res) => {
+  console.log({ email: req.cookies.email });
+  if (req.cookies.email) return res.redirect('/catagory');
   res.render('home.ejs');
+});
+router.get('/logout', (req, res) => {
+  console.log();
+  // res.cookie().destroy();
+  res.cookie('email', '');
+
+  return res.render('home.ejs');
 });
 router.post('/login', async (req, res) => {
   let email = req.body.email;

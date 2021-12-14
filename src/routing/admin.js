@@ -5,7 +5,11 @@ import {
   AdminLogin,
   getAllSet,
 } from '../services/AdminService';
-import { fetchCatagory, getAllCategory } from '../services/GetDataServices';
+import {
+  fetchCatagory,
+  fetchTestDetail,
+  getAllCategory,
+} from '../services/GetDataServices';
 import formidable from 'formidable';
 import path from 'path';
 import fs from 'fs';
@@ -28,8 +32,21 @@ router.post('/addCatagory', async (req, res) => {
       return res.send('All ready category code present');
     }
     return false;
-
-    
+  }
+});
+router.post('/getTestDetail', async (req, res) => {
+  let email = req.body.email;
+  try {
+    let data = await fetchTestDetail(email);
+    let msg = 'showing results';
+    if (!data || data.length == 0) {
+      data = [];
+      msg = 'no user found';
+    }
+    return res.render('testDetail.ejs', { data: data, msg });
+  } catch (err) {
+    console.error(err);
+    res.render('testDetail.ejs', { data: [], msg: 'some error occured' });
   }
 });
 
@@ -70,7 +87,7 @@ router.post('/login', async (req, res) => {
   let username = req.body.id;
   let password = req.body.password;
   let isadmin = await AdminLogin(username, password);
-  console.log(isadmin);
+  // console.log(isadmin);
   let listCat = await getAllCategory();
   if (isadmin) {
     return res.render('adminHome.ejs', { results: listCat });
@@ -148,8 +165,13 @@ router.post('/fileupload', async (req, res) => {
     // console.log(isInserted);
   });
   // console.log('Helooooooooo');
-  if (isInserted == true) return res.send('Inserted');
-  res.send('some error occured');
+  let listCat = await getAllCategory();
+  if (isInserted == true)
+    return res.render('adminHome.ejs', {
+      results: listCat,
+      msg: 'set question saved successfully',
+    });
+  res.render('adminHome.ejs', { results: listCat, msg: 'some error occured' });
   // return res.send('Not inserted');
 });
 
