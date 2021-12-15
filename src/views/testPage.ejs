@@ -38,6 +38,7 @@
                 <div class="carousel-item active" id=bg-color>
                   <p class="font-weight-bold text-center">INSTRUCTIONS</p></div>
                     <form action="/submitTest" method="POST" name="submitAnswer">
+                      <p id="totalQuestions"></p>
                
                   <% for(i in results) { %>
                   <div class="carousel-item">
@@ -83,14 +84,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
       <script>
+        let countFullScreen =0;
           document.getElementById("fullscreen").style.display = "";
              document.getElementById("page").style.display = "none";
             document.addEventListener("fullscreenchange", (event) => {
                 console.log(document.fullscreen)
                 if (document.fullscreen == false) {
              document.getElementById("page").style.display = "none";
-                  alert("entering this frequently will submit the test without your concern");
+             countFullScreen++;
+                  alert(`exiting the fullscreen ${3-countFullScreen} will submit the test without your concern`);
                   document.getElementById("fullscreen").style.display = "";
+                  if(countFullScreen>=3) $('#submitExam').click();
+
 
 
                 }
@@ -109,6 +114,8 @@
         $('.carousel').carousel(1);
         var totalItems = $('.carousel-item').length;
         var currentIndex = $('div.active').index() + 1;
+        document.getElementById("totalQuestions").innerHTML=`total questions ${totalItems-1}`
+        
         console.log(totalItems + "" + currentIndex);
 
         let testMin ='<%- testMin %>';
