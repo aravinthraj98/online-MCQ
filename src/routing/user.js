@@ -115,7 +115,7 @@ router.get('/category/set/:set', async (req, res) => {
   let results = await fetchQuestions(setCode);
   if (results.length <= 0) return res.redirect('/catagory?noquestion=true');
   req.session.exam = 'writing';
-  req.session.time = testMin;
+  req.session.time = testMin + 2 ;
   req.session.cookie.maxAge = testMin * 60 * 1000;
   console.log('session created');
   return res.render('testPage.ejs', { results, set: setCode, testMin });

@@ -82,7 +82,21 @@ async function fetchTestDetail(email) {
   }
   return tempData;
 }
+async function deleteQuestion(questionCode){
+  try{
+    await questionSet.destroy({where:{
+      questionCode:questionCode
+    }});
+    return true;
+  }
+  catch(err){
+    console.log(err);
+    return false;
+  }
+
+}
 export {
+ deleteQuestion,
   fetchCatagory,
   getAllCategory,
   getSet,

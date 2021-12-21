@@ -1,51 +1,54 @@
 // const CategorySet = require("./CategorySet");
 
-const { QueryInterface } = require("sequelize");
+const { QueryInterface } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  const TestDetail = sequelize.define('testDetail', {
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
- 
-      validate: {
-        notEmpty: true,
+  const TestDetail = sequelize.define(
+    'testDetail',
+    {
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+
+        validate: {
+          notEmpty: true,
+        },
+      },
+
+      setCode: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+          model: 'categorysets',
+          key: 'setCode',
+          sonDelete: 'cascade',
+        },
+      },
+      // categoryCode: {
+      //   type: DataTypes.STRING,
+      //   allowNull: false,
+      //  references:{
+      //       model:'categories',
+      //       key:'categoryCode'
+      //   }
+      //},
+      testTime: {
+        type: DataTypes.INTEGER,
+      },
+      testScore: {
+        type: DataTypes.INTEGER,
       },
     },
-   
-    setCode: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      references:{
-          model:'categorysets',
-          key:'setCode',
-          sonDelete: 'cascade',
-      }
-     
-    },
-    // categoryCode: {
-    //   type: DataTypes.STRING,
-    //   allowNull: false,
-    //  references:{
-    //       model:'categories',
-    //       key:'categoryCode'
-    //   }
-    //},
-    testTime:{
-        type:DataTypes.INTEGER
-      
-    },
-     testScore:{
-        type:DataTypes.INTEGER,
-     
-    },
-    
-   
-    
-  });
-  TestDetail.removeAttribute("id")
-
-  
+    {
+      indexes: [
+        {
+          primarykey: true,
+          fields: ['setCode', 'email'],
+        },
+      ],
+    }
+  );
+  TestDetail.removeAttribute('id');
 
   return TestDetail;
 };

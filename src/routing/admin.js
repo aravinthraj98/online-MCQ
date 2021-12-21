@@ -6,7 +6,9 @@ import {
   getAllSet,
 } from '../services/AdminService';
 import {
+  deleteQuestion,
   fetchCatagory,
+  fetchQuestions,
   fetchTestDetail,
   getAllCategory,
 } from '../services/GetDataServices';
@@ -173,6 +175,16 @@ router.post('/fileupload', async (req, res) => {
     });
   res.render('adminHome.ejs', { results: listCat, msg: 'some error occured' });
   // return res.send('Not inserted');
+});
+
+router.post('/getQuestions', async (req, res) => {
+  let questions = await fetchQuestions(req.body.setCode);
+  res.send(questions);
+});
+router.post('/deleteQuestion', async (req, res) => {
+  let questionCode = req.body.questionCode;
+  let response = await deleteQuestion(questionCode);
+  res.send(response);
 });
 
 export default router;

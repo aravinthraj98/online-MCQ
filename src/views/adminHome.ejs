@@ -118,7 +118,7 @@
                         style="display: '';">
                         Add QUESTION Set<br>
                       
-                  <select id="selectSet" class="form-control"  name="setCode" required></select>
+                  <select id="selectSet" class="form-control" onchange="getSetQuestions()"  name="setCode" required></select>
                     <!-- <input type="text" placeholder="setName" class="form-control"><br>
                     <i>only .xlsx allowed each row will be a new question please make sure all the questions cell in
                         xlsx filled properly other wise the upload will be interrupted with error.But still the
@@ -128,9 +128,13 @@
 
                     <input type="file" name="filetoupload" accept=".xlsx" />
                     <input type="submit" id="addSet" class="btn" style="background-color: #543a7ce3;" />
+                   
 
 
                     </form>
+                    <div id="setQuestions">
+                    
+                    </div>
                     <!-- method="POST" action="/addCatagory" -->
                     <form style="display:none;" id="AddSetForm">
                         <select class="form-control" name="categoryCode" id="SetcategoryCode" required>
@@ -170,7 +174,36 @@
     <script>
 
 
+   function getSetQuestions(){
+       let val =$('#selectSet').val()
+       alert(val);
+       $.post("/admin/getQuestions",{
+           setCode:val
+       },(data,status)=>{
+           console.log(data);
+         let questionDiv = document.getElementById("setQuestions");
+         questionDiv.innerHTML="";
+         for(let i in data){
+             let newDiv =`<div style="width:100%">${data[i].question}</br>
+             <p>${data[i].answer}</p>
+             <button value=${data[i].questionCode} onclick="deleteQuestion(${data[i].questionCode})" class ="btn btn-danger"> delete </button></div> `
+             questionDiv.innerHTML+=newDiv;
+         }
+       })
+   }
+   function deleteQuestion(id){
+alert(id)
 
+    $.post("/admin/deleteQuestion",{
+        questionCode:id
+    },(data,status)=>{
+        if(data==true){
+            alert("deleted successfully");
+            getSetQuestions();
+        }
+        alert(data)
+    })
+   }
 
 
         $('#menu-toggle').click(function (e) {
